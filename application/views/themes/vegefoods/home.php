@@ -183,7 +183,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   </div>
 </section>
 
-<section class="ftco-section testimony-wrapmony-section">
+<!-- <section class="ftco-section testimony-wrapmony-section">
     <div class="container">
       <div class="row justify-content-center mb-5 pb-3">
         <div class="col-md-7 heading-section ftco-animate text-center">
@@ -218,4 +218,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
