@@ -82,6 +82,21 @@ class Orders extends CI_Controller {
         }
     }
 
+    public function update_order_item($id){
+        $items = $this->order->order_items($id);
+        print_r($items);
+        print_r($this->input->post());
+        $product_id = $this->input->post('product_id');
+        $order_qty = $this->input->post('order_qty');
+        $data = array(
+                'order_qty' => $order_qty,
+        );
+
+        $items = $this->order->order_items_update($id, $product_id, $data);
+        
+        redirect('admin/orders/view/'. $id.'#pesanan');
+    }
+
     public function status()
     {
         $status = $this->input->post('status');

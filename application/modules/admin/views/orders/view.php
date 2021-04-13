@@ -98,9 +98,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             
-            <div class="card card-primary">
+            <div class="card card-primary" id="pesanan">
                     <div class="card-header">
                         <h3 class="mb-0">Barang dalam pesanan</h3>
+                        
+                        <!-- <a href="#" class="btn btn-primary btn-sm">Tambah Item</a> -->
                     </div>
                     <div class="card-body p-0">
                         <table class="table align-items-center table-flush">
@@ -108,21 +110,56 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <tr>
                                 <th scope="col"></th>
                                 <th scope="col">Produk</th>
-                                <th scope="col">Jumlah beli</th>
+                                <th scope="col">Jumlah</th>
                                 <th scope="col">Harga satuan</th>
+                                <th scope="col">Sub Total</th>
+                                <th></th>
                             </tr>
                           </thead>
                           <tbody>
                           <?php foreach ($items as $item) : ?>
-                            <tr>
+                            <tr id="item-id-<?= $item->product_id ?>">
                                 <td>
                                     <img class="img img-fluid rounded" style="width: 60px; height: 60px;" alt="<?php echo $item->name; ?>" src="<?php echo base_url('assets/uploads/products/'. $item->picture_name); ?>">
                                 </td>
                                 <td>
                                     <h5 class="mb-0"><?php echo $item->name; ?></h5>
                                 </td>
-                                <td><?php echo $item->order_qty; ?></td>
+                                <td>
+                                <?php echo $item->order_qty; ?>
+                              </td>
+
                                 <td>Rp <?php echo format_rupiah($item->order_price); ?></td>
+                                <td>Rp <?php echo format_rupiah($item->order_price*$item->order_qty); ?></td>
+                                <td>
+                                <button class="btn btn-success btn-sm btn-sunting" for="item-order-<?= $item->product_id ?>"><i class="fa fa-edit"></i></button>
+                                <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                              </td>
+                            </tr>
+                            
+                            <tr id="item-order-<?= $item->product_id ?>" class="item-order" style="display: none;">
+                            
+                              <form action="<?php echo site_url('admin/orders/update_order_item/'.$item->order_id); ?>" method="POST">
+                                <input type="hidden" name="product_id" value="<?= $item->product_id ?>">
+                                <td>
+                                    <img class="img img-fluid rounded" style="width: 60px; height: 60px;" alt="<?php echo $item->name; ?>" src="<?php echo base_url('assets/uploads/products/'. $item->picture_name); ?>">
+                                </td>
+                                <td>
+                                    <h5 class="mb-0"><?php echo $item->name; ?></h5>
+                                </td>
+                                <td>
+                                  <input type="number" id="order_qty" name="order_qty" class="form-control input-number" value="<?php echo $item->order_qty; ?>"
+                                  min="1" max="100" size="2">
+                              </td>
+                                <td>Rp <?php echo format_rupiah($item->order_price); ?></td>
+                                <td>Rp <?php echo format_rupiah($item->order_price*$item->order_qty); ?></td>
+                                <td>
+                                <button type="submit" href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i></button>
+                                <button class="btn btn-danger btn-sm btn-batal" for="item-id-<?= $item->product_id ?>">
+                                <i class="fa fa-times"></i>
+                          </button>
+                              </td>
+                          </form>
                             </tr>
                           <?php endforeach; ?>
                           </tbody>
@@ -254,3 +291,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
         </div>
       </div>
+
+      <script>
+        $( ".btn-sunting" ).click(function() {
+            var item_id = $(this).attr("for");
+            $("#"+item_id).show();
+            var parrent = $(this).closest('tr');
+            parrent.hide();
+          });
+        $( ".btn-batal" ).click(function() {
+            var item_id = $(this).attr("for");
+            $("#"+item_id).show();
+            var parrent = $(this).closest('tr');
+            parrent.hide();
+          });
+      </script>

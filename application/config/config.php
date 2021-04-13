@@ -23,7 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/toko-sayur-master/';
+$config['base_url'] = 'http://localhost:8080/toko-sayur-master/';
+// $config['base_url'] = 'http://localhost/toko-sayur-master/';
 
 /*
 |--------------------------------------------------------------------------

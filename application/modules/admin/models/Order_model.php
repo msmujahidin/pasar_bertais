@@ -67,13 +67,18 @@ class Order_model extends CI_Model {
     public function order_items($id)
     {
         $items = $this->db->query("
-            SELECT oi.product_id, oi.order_qty, oi.order_price, p.name, p.picture_name
+            SELECT oi.product_id, oi.order_id, oi.order_qty, oi.order_price, p.name, p.picture_name
             FROM order_item oi
             JOIN products p
 	            ON p.id = oi.product_id
             WHERE order_id = '$id'");
 
         return $items->result();
+    }
+    public function order_items_update($id, $product_id, $data){
+        $this->db->where('order_id', $id);
+        $this->db->where('product_id', $product_id);
+        $this->db->update('order_item', $data); 
     }
 
     public function set_status($status, $order)
