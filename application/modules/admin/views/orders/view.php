@@ -103,6 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <h3 class="mb-0">Barang dalam pesanan</h3>
                         
                         <a href="<?php echo site_url('admin/orders/create/'.$order_id); ?>" class="btn btn-primary btn-sm">Tambah Item</a>
+                        <a href="<?php echo site_url('admin/orders/export/'.$order_id); ?>" class="btn btn-success btn-sm">Export Excel</a>
                     </div>
                     <div class="card-body p-0">
                         <table class="table align-items-center table-flush">

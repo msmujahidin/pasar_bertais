@@ -1,6 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+// Load library phpspreadsheet
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+// End load library phpspreadsheet
+
 class Orders extends CI_Controller {
     public function __construct()
     {
@@ -112,6 +119,47 @@ class Orders extends CI_Controller {
     public function delete($id, $order_id){
         $this->order->order_items_delete($id);
         $this->order->update_total_price($order_id);
+        redirect('admin/orders/view/'. $order_id.'#pesanan');
+    }
+
+    public function export($order_id){
+        $this->load->helper('download');
+        if ( $this->order->is_order_exist($order_id)){
+            $data = $this->order->order_data($order_id);
+            $items = $this->order->order_items($order_id);
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            
+            $sheet->setCellValue('A1', 'Nama Produk');
+            $sheet->setCellValue('B1', 'Harga');
+            $sheet->setCellValue('C1', 'Jumlah');
+            $sheet->setCellValue('D1', 'Sub Total');
+            $sheet->getStyle('A1:D1')->getAlignment()->setHorizontal('center');
+            $i=2;
+            foreach($items as $item):
+                $sub_total = $item->order_qty * $item->order_price;
+                $sheet->setCellValue('A'.$i, $item->name);
+                $sheet->setCellValue('B'.$i, 'Rp'.format_rupiah($item->order_price));
+                $sheet->setCellValue('C'.$i, $item->order_qty);
+                $sheet->setCellValue('D'.$i, 'Rp'.format_rupiah($sub_total));
+                $i++;
+            endforeach;
+            $sheet->mergeCells('A'.$i.':C'.$i);
+            $sheet->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal('center');
+
+            $sheet->setCellValue('A'.$i, 'TOTAL');
+            $sheet->setCellValue('D'.$i, 'Rp'.format_rupiah($data->total_price));
+            foreach (range('A','D') as $col) {
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+            }
+
+            $file_name = 'report.xlsx';
+            $writer = new Xlsx($spreadsheet);
+            $writer->save($file_name);
+            $path = file_get_contents(base_url($file_name)); // get file name
+            force_download($file_name, $path); // start download`
+        }
         redirect('admin/orders/view/'. $order_id.'#pesanan');
     }
 
