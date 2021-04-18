@@ -67,7 +67,7 @@ class Order_model extends CI_Model {
     public function order_items($id)
     {
         $items = $this->db->query("
-            SELECT oi.product_id, oi.order_id, oi.order_qty, oi.order_price, p.name, p.picture_name
+            SELECT oi.id, oi.product_id, oi.order_id, oi.order_qty, oi.order_price, p.name, p.picture_name
             FROM order_item oi
             JOIN products p
 	            ON p.id = oi.product_id
@@ -75,10 +75,41 @@ class Order_model extends CI_Model {
 
         return $items->result();
     }
+    public function get_total_price($id){
+        // $query = $this->db->query("SELECT SUM(`order_price`*`order_qty`) as total_price FROM `order_item` WHERE `order_id`=$id");
+        $this->db->select('SUM(order_price * order_qty) as total_price');
+        $this->db->where('order_id',$id);
+        $query = $this->db->get('order_item');
+        return $query->row();
+    }
+    public function get_total_items($id){
+        $this->db->select('count(id) as total_items');
+        $this->db->where('order_id',$id);
+        $query = $this->db->get('order_item');
+        return $query->row();
+    }
+    public function update_total_price($id){
+        $total_price = $this->get_total_price($id)->total_price;
+        $total_items = $this->get_total_items($id)->total_items;
+        $data = array(
+            'total_price' => $total_price,
+            'total_items' => $total_items,
+        );
+        $this->db->where('id', $id);
+        $this->db->update('orders', $data); 
+    }
     public function order_items_update($id, $product_id, $data){
         $this->db->where('order_id', $id);
         $this->db->where('product_id', $product_id);
         $this->db->update('order_item', $data); 
+        $this->update_total_price($id);
+    }
+    public function order_items_insert($data){
+        $this->db->insert('order_item', $data); 
+    }
+    public function order_items_delete($id){
+        $this -> db -> where('id', $id);
+        $this -> db -> delete('order_item');
     }
 
     public function set_status($status, $order)

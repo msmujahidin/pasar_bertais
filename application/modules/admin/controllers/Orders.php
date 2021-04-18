@@ -9,6 +9,7 @@ class Orders extends CI_Controller {
         verify_session('admin');
 
         $this->load->model(array(
+            'product_model' => 'product',
             'order_model' => 'order'
         ));
     }
@@ -58,6 +59,7 @@ class Orders extends CI_Controller {
     {
         if ( $this->order->is_order_exist($id))
         {
+
             $data = $this->order->order_data($id);
             $items = $this->order->order_items($id);
             $banks = json_decode(get_settings('payment_banks'));
@@ -65,6 +67,7 @@ class Orders extends CI_Controller {
  
             $params['title'] = 'Order #'. $data->order_number;
 
+            $order['order_id'] = $id;
             $order['data'] = $data;
             $order['items'] = $items;
             $order['delivery_data'] = json_decode($data->delivery_data);
@@ -72,6 +75,7 @@ class Orders extends CI_Controller {
             $order['order_flash'] = $this->session->flashdata('order_flash');
             $order['payment_flash'] = $this->session->flashdata('payment_flash');
 
+            // print_r($items);
             $this->load->view('header', $params);
             $this->load->view('orders/view', $order);
             $this->load->view('footer');
@@ -82,10 +86,36 @@ class Orders extends CI_Controller {
         }
     }
 
+    public function create($id = 0){
+        if ( $this->order->is_order_exist($id)){
+            $data = $this->order->order_data($id);
+            $params['title'] = 'Order #'. $data->order_number;
+
+            $products['data'] = $data;
+            $products['order_id'] = $id;
+            
+            $products['products'] = $this->product->get_all_products(16, 0);
+
+            // print_r($products['products']);
+
+            $this->load->view('header', $params);
+            $this->load->view('orders/list_product', $products);
+            $this->load->view('footer');
+
+        }
+        else
+        {
+            show_404();
+        }
+    }
+
+    public function delete($id, $order_id){
+        $this->order->order_items_delete($id);
+        $this->order->update_total_price($order_id);
+        redirect('admin/orders/view/'. $order_id.'#pesanan');
+    }
+
     public function update_order_item($id){
-        $items = $this->order->order_items($id);
-        print_r($items);
-        print_r($this->input->post());
         $product_id = $this->input->post('product_id');
         $order_qty = $this->input->post('order_qty');
         $data = array(
@@ -95,6 +125,23 @@ class Orders extends CI_Controller {
         $items = $this->order->order_items_update($id, $product_id, $data);
         
         redirect('admin/orders/view/'. $id.'#pesanan');
+    }
+    public function insert_order_item($id){
+        $product_id = $this->input->post('product_id');
+        $order_price = $this->input->post('order_price');
+        $data = array(
+            'order_id' => $id,
+            'product_id' => $product_id,
+            'order_qty' => 1,
+            'order_price' => $order_price,
+        );
+
+        $this->order->order_items_insert($data);
+
+        // print_r($data);
+        $this->order->update_total_price($id);
+        redirect('admin/orders/view/'. $id.'#pesanan');
+        
     }
 
     public function status()

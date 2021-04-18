@@ -102,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="card-header">
                         <h3 class="mb-0">Barang dalam pesanan</h3>
                         
-                        <!-- <a href="#" class="btn btn-primary btn-sm">Tambah Item</a> -->
+                        <a href="<?php echo site_url('admin/orders/create/'.$order_id); ?>" class="btn btn-primary btn-sm">Tambah Item</a>
                     </div>
                     <div class="card-body p-0">
                         <table class="table align-items-center table-flush">
@@ -133,7 +133,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <td>Rp <?php echo format_rupiah($item->order_price*$item->order_qty); ?></td>
                                 <td>
                                 <button class="btn btn-success btn-sm btn-sunting" for="item-order-<?= $item->product_id ?>"><i class="fa fa-edit"></i></button>
-                                <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <button onclick="mDelete('<?php echo $item->id;?>','<?php echo $item->order_id;?>');" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i></button>
                               </td>
                             </tr>
                             
@@ -293,6 +294,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </div>
 
       <script>
+      
+      var url="<?php echo site_url('admin/orders/delete/');?>";
+          function mDelete(id,order_id){
+            var r=confirm("Do you want to delete this?")
+              if (r==true)
+                window.location = url+id+"/"+order_id;
+              else
+                return false;
+          } 
+
+
         $( ".btn-sunting" ).click(function() {
             var item_id = $(this).attr("for");
             $("#"+item_id).show();
