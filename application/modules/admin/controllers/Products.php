@@ -120,6 +120,8 @@ class Products extends CI_Controller {
         $this->form_validation->set_error_delimiters('<div class="form-error text-danger font-weight-bold">', '</div>');
 
         $this->form_validation->set_rules('name', 'Nama produk', 'trim|required|min_length[4]|max_length[255]');
+        $this->form_validation->set_rules('no_sequence', 'No Urut', 'trim|required');
+        $this->form_validation->set_rules('no_location', 'No lokasi', 'trim|required');
         $this->form_validation->set_rules('price', 'Harga produk', 'trim|required');
         $this->form_validation->set_rules('stock', 'Stok barang', 'required|numeric');
         $this->form_validation->set_rules('unit', 'Satuan barang', 'required');
@@ -132,6 +134,9 @@ class Products extends CI_Controller {
         else
         {
             $name = $this->input->post('name');
+            $no_sequence = $this->input->post('no_sequence');
+            $no_location = $this->input->post('no_location');
+
             $category_id = $this->input->post('category_id');
             $price = $this->input->post('price');
             $stock = $this->input->post('stock');
@@ -168,6 +173,8 @@ class Products extends CI_Controller {
             $product['category_id'] = $category_id;
             $product['sku'] = $sku;
             $product['name'] = $name;
+            $product['no_sequence'] = $no_sequence;
+            $product['no_location'] = $no_location;
             $product['description'] = $desc;
             $product['price'] = $price;
             $product['stock'] = $stock;
@@ -226,6 +233,8 @@ class Products extends CI_Controller {
             $current_picture = $data->picture_name;
 
             $name = $this->input->post('name');
+            $no_sequence = $this->input->post('no_sequence');
+            $no_location = $this->input->post('no_location');
             $category_id = $this->input->post('category_id');
             $price = $this->input->post('price');
             $discount = $this->input->post('price_discount');
@@ -272,6 +281,8 @@ class Products extends CI_Controller {
 
             $product['category_id'] = $category_id;
             $product['name'] = $name;
+            $product['no_sequence'] = $no_sequence;
+            $product['no_location'] = $no_location;
             $product['description'] = $desc;
             $product['price'] = $price;
             $product['current_discount'] = $discount;

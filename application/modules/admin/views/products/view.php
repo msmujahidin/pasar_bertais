@@ -49,6 +49,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <td><b><?php echo $product->name; ?></b></td>
                     </tr>
                     <tr>
+                        <td>No Urut</td>
+                        <td>:</td>
+                        <td><b><?php echo $product->no_sequence; ?></b></td>
+                    </tr>
+                    <tr>
+                        <td>No Lokasi</td>
+                        <td>:</td>
+                        <td><b><?php echo $product->no_location; ?></b></td>
+                    </tr>
+                    <tr>
                         <td>SKU</td>
                         <td>:</td>
                         <td><b><?php echo $product->sku; ?></b></td>
