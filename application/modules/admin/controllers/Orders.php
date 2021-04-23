@@ -5,7 +5,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 // End load library phpspreadsheet
 
 class Orders extends CI_Controller {
@@ -127,32 +129,78 @@ class Orders extends CI_Controller {
         if ( $this->order->is_order_exist($order_id)){
             $data = $this->order->order_data($order_id);
             $items = $this->order->order_items($order_id);
-
+            $delivery_data = json_decode($data->delivery_data);
+            print_r($delivery_data->customer);
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             
-            $sheet->setCellValue('A1', 'Nama Produk');
-            $sheet->setCellValue('B1', 'Harga');
-            $sheet->setCellValue('C1', 'Jumlah');
-            $sheet->setCellValue('D1', 'Sub Total');
-            $sheet->getStyle('A1:D1')->getAlignment()->setHorizontal('center');
-            $i=2;
+            $sheet->getColumnDimension('A')->setWidth(15);
+            $sheet->getColumnDimension('B')->setWidth(18);
+            $sheet->getColumnDimension('C')->setWidth(18);
+            $sheet->getColumnDimension('D')->setWidth(12);
+            $sheet->getColumnDimension('E')->setWidth(8);
+            $sheet->getColumnDimension('F')->setWidth(15);
+
+            // foreach (range('A','F') as $col) {
+            //     $sheet->getColumnDimension($col)->setAutoSize(true);
+            // }
+
+            $sheet->getStyle('A1:A5')->getFont()->setBold(true);
+
+            $sheet->setCellValue('A1', 'Nama Penerima');
+            $sheet->setCellValue('A2', 'Nomor WA');
+            $sheet->mergeCells('A3:A4');
+            $sheet->setCellValue('A3', 'Alamat');
+            $sheet->mergeCells('A5:A6');
+            $sheet->setCellValue('A5', 'Note');
+
+            $sheet->getStyle('A3:F6')->getAlignment()->setVertical('center');
+
+            $customer = $delivery_data->customer;
+            $sheet->setCellValue('B1', $customer->name);
+            $sheet->setCellValue('B2', $customer->phone_number);
+            $sheet->mergeCells('B3:F4');
+            $sheet->setCellValue('B3', $customer->address);
+            $sheet->mergeCells('B5:F6');
+            $sheet->setCellValue('B5', $delivery_data->note);
+            
+            
+            $i=$i0=9;
+            $sheet->mergeCells('A'.$i.':'.'F'.$i);
+            $sheet->getStyle('A'.$i)->getFont()->setBold(true);
+            $sheet->getStyle('A'.$i)->getAlignment()->setHorizontal('center');
+            $sheet->setCellValue('A'.$i, 'Barang Pesanan');
+            $i++;
+            $sheet->setCellValue('A'.$i, 'No Lokasi');
+            $sheet->setCellValue('B'.$i, 'No Urut');
+            $sheet->setCellValue('C'.$i, 'Nama Produk');
+            $sheet->setCellValue('D'.$i, 'Harga (RP)');
+            $sheet->setCellValue('E'.$i, 'Jumlah');
+            $sheet->setCellValue('F'.$i, 'Sub Total (RP)');
+
+            // $sheet->getStyle('A'.$i.':F'.$i)->getAlignment()->setHorizontal('center');
+            $i++;
             foreach($items as $item):
                 $sub_total = $item->order_qty * $item->order_price;
-                $sheet->setCellValue('A'.$i, $item->name);
-                $sheet->setCellValue('B'.$i, 'Rp'.format_rupiah($item->order_price));
-                $sheet->setCellValue('C'.$i, $item->order_qty);
-                $sheet->setCellValue('D'.$i, 'Rp'.format_rupiah($sub_total));
+                $sheet->setCellValue('A'.$i, $item->no_location);
+                $sheet->setCellValue('b'.$i, $item->no_sequence);
+                $sheet->setCellValue('C'.$i, $item->name);
+                $sheet->setCellValue('D'.$i, format_rupiah($item->order_price));
+                $sheet->setCellValue('E'.$i, $item->order_qty);
+                $sheet->setCellValue('F'.$i, format_rupiah($sub_total));
                 $i++;
             endforeach;
-            $sheet->mergeCells('A'.$i.':C'.$i);
-            $sheet->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('A'.$i.':E'.$i);
+            $sheet->getStyle('A'.$i.':E'.$i)->getAlignment()->setHorizontal('center');
 
-            $sheet->setCellValue('A'.$i, 'TOTAL');
-            $sheet->setCellValue('D'.$i, 'Rp'.format_rupiah($data->total_price));
-            foreach (range('A','D') as $col) {
-                $sheet->getColumnDimension($col)->setAutoSize(true);
-            }
+            $sheet->setCellValue('A'.$i, 'TOTAL (RP)');
+            $sheet->setCellValue('F'.$i, format_rupiah($data->total_price));
+
+            $sheet
+            ->getStyle('A'.$i0.':F'.$i)
+            ->getBorders()->getAllBorders()
+            ->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('A'.$i0.':F'.$i)->getAlignment()->setHorizontal('center');
 
             $file_name = 'report.xlsx';
             $writer = new Xlsx($spreadsheet);

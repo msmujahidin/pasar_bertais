@@ -67,7 +67,8 @@ class Order_model extends CI_Model {
     public function order_items($id)
     {
         $items = $this->db->query("
-            SELECT oi.id, oi.product_id, oi.order_id, oi.order_qty, oi.order_price, p.name, p.picture_name
+            SELECT oi.id, oi.product_id, oi.order_id, oi.order_qty, oi.order_price, 
+            p.name, p.picture_name, p.no_location, p.no_sequence
             FROM order_item oi
             JOIN products p
 	            ON p.id = oi.product_id
