@@ -38,6 +38,7 @@ class Register extends CI_Controller {
             $phone_number = $this->input->post('phone_number');
             $email = $this->input->post('email');
             $address = $this->input->post('address');
+            $profile_picture = 'default.png';
 
             $password = password_hash($password, PASSWORD_BCRYPT);
 
@@ -45,6 +46,7 @@ class Register extends CI_Controller {
                 'email' => $email,
                 'username' => $username,
                 'password' => $password,
+                'profile_picture' => $profile_picture,
                 'role_id' => 2,
                 'register_date' => date('Y-m-d H:i:s')
             );
@@ -55,6 +57,7 @@ class Register extends CI_Controller {
                 'user_id' => $user,
                 'name' => $name,
                 'phone_number' => $phone_number,
+                'profile_picture' => $profile_picture,
                 'address' => $address
             );
 
