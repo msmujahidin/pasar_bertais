@@ -65,14 +65,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="form-group">
-                  <label class="form-control-label" for="name">No Urut:</label>
-                  <input type="text" name="no_sequence" value="<?php echo set_value('no_sequence'); ?>" class="form-control" id="no_sequence">
-                  <?php echo form_error('no_sequence'); ?>
+                  <label class="form-control-label" for="name">Penjual:</label>
+                  <input type="text" name="penjual" value="<?php echo set_value('penjual'); ?>" class="form-control" id="penjual">
+                  <?php echo form_error('penjual'); ?>
                 </div>
                 <div class="form-group">
-                  <label class="form-control-label" for="name">No lokasi:</label>
-                  <input type="text" name="no_location" value="<?php echo set_value('no_location'); ?>" class="form-control" id="no_location">
-                  <?php echo form_error('no_location'); ?>
+                  <label class="form-control-label" for="name">No HP:</label>
+                  <input type="text" name="no_hp" value="<?php echo set_value('no_hp'); ?>" class="form-control" id="no_hp">
+                  <?php echo form_error('no_hp'); ?>
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" for="name">Lokasi:</label>
+                  <input type="text" name="lokasi" value="<?php echo set_value('lokasi'); ?>" class="form-control" id="lokasi">
+                  <?php echo form_error('lokasi'); ?>
                 </div>
 
                 <div class="form-group">

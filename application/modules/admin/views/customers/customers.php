@@ -29,8 +29,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <!-- Card header -->
             <div class="card-header">
               <h3 class="mb-0">Pelanggan</h3>
+              <a href="" class="btn btn-sm btn-primary">Tambah Pelanggan</a>
             </div>
-
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush" id="customerList" style="width: 100%">
@@ -143,7 +143,11 @@ $(document).ready(function() {
             var url = window.location.href.split('?')[0].replace('#', '');
             url = url + '/edit/'+ row.id;
 
-            return '<div class="text-right"><a href="#" data-id="'+row.id+'" class="btn btn-danger btn-sm btnDelete"><i class="fa fa-trash"></i></a></div>';}
+            return `<div class="text-right">
+                      <a href="${url}" data-id="${row.id}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                      <a href="#" data-id="${row.id}" class="btn btn-danger btn-sm btnDelete"><i class="fa fa-trash"></i></a>
+                    </div>`;
+        }
         }
       ],
       "language" : {

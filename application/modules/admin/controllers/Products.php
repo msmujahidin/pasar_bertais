@@ -120,8 +120,10 @@ class Products extends CI_Controller {
         $this->form_validation->set_error_delimiters('<div class="form-error text-danger font-weight-bold">', '</div>');
 
         $this->form_validation->set_rules('name', 'Nama produk', 'trim|required|min_length[4]|max_length[255]');
-        $this->form_validation->set_rules('no_sequence', 'No Urut', 'trim|required');
-        $this->form_validation->set_rules('no_location', 'No lokasi', 'trim|required');
+        $this->form_validation->set_rules('penjual', 'Penjual', 'trim|required|min_length[4]|max_length[255]');
+        $this->form_validation->set_rules('no_hp', 'No HP', 'trim|required|min_length[10]|max_length[20]');
+        $this->form_validation->set_rules('lokasi', 'Lokasi', 'trim|required|min_length[4]|max_length[255]');
+
         $this->form_validation->set_rules('price', 'Harga produk', 'trim|required');
         $this->form_validation->set_rules('stock', 'Stok barang', 'required|numeric');
         $this->form_validation->set_rules('unit', 'Satuan barang', 'required');
@@ -134,14 +136,15 @@ class Products extends CI_Controller {
         else
         {
             $name = $this->input->post('name');
-            $no_sequence = $this->input->post('no_sequence');
-            $no_location = $this->input->post('no_location');
+            $penjual = $this->input->post('penjual');
+            $no_hp = $this->input->post('no_hp');
+            $lokasi = $this->input->post('lokasi');
 
             $category_id = $this->input->post('category_id');
             $price = $this->input->post('price');
             $stock = $this->input->post('stock');
             $unit = $this->input->post('unit');
-            $desc = $this->input->post('desc');
+            $description = $this->input->post('description');
             $date = date('Y-m-d H:i:s');
 
             $config['upload_path'] = './assets/uploads/products/';
@@ -173,9 +176,10 @@ class Products extends CI_Controller {
             $product['category_id'] = $category_id;
             $product['sku'] = $sku;
             $product['name'] = $name;
-            $product['no_sequence'] = $no_sequence;
-            $product['no_location'] = $no_location;
-            $product['description'] = $desc;
+            $product['penjual'] = $penjual;
+            $product['no_hp'] = $no_hp;
+            $product['lokasi'] = $lokasi;
+            $product['description'] = $description;
             $product['price'] = $price;
             $product['stock'] = $stock;
             $product['product_unit'] = $unit;
@@ -216,6 +220,10 @@ class Products extends CI_Controller {
         $this->form_validation->set_error_delimiters('<div class="form-error text-danger font-weight-bold">', '</div>');
 
         $this->form_validation->set_rules('name', 'Nama produk', 'trim|required|min_length[4]|max_length[255]');
+        $this->form_validation->set_rules('penjual', 'Penjual', 'trim|required|min_length[4]|max_length[255]');
+        $this->form_validation->set_rules('no_hp', 'No HP', 'trim|required|min_length[10]|max_length[20]');
+        $this->form_validation->set_rules('lokasi', 'Lokasi', 'trim|required|min_length[4]|max_length[255]');
+
         $this->form_validation->set_rules('price', 'Harga produk', 'trim|required');
         $this->form_validation->set_rules('stock', 'Stok barang', 'required|numeric');
         $this->form_validation->set_rules('unit', 'Satuan barang', 'required');
@@ -233,14 +241,16 @@ class Products extends CI_Controller {
             $current_picture = $data->picture_name;
 
             $name = $this->input->post('name');
-            $no_sequence = $this->input->post('no_sequence');
-            $no_location = $this->input->post('no_location');
+            $penjual = $this->input->post('penjual');
+            $no_hp = $this->input->post('no_hp');
+            $lokasi = $this->input->post('lokasi');
+
             $category_id = $this->input->post('category_id');
             $price = $this->input->post('price');
             $discount = $this->input->post('price_discount');
             $stock = $this->input->post('stock');
             $unit = $this->input->post('unit');
-            $desc = $this->input->post('desc');
+            $description = $this->input->post('description');
             $available = $this->input->post('is_available');
             $date = date('Y-m-d H:i:s');
 
@@ -281,9 +291,11 @@ class Products extends CI_Controller {
 
             $product['category_id'] = $category_id;
             $product['name'] = $name;
-            $product['no_sequence'] = $no_sequence;
-            $product['no_location'] = $no_location;
-            $product['description'] = $desc;
+            $product['penjual'] = $penjual;
+            $product['no_hp'] = $no_hp;
+            $product['lokasi'] = $lokasi;
+
+            $product['description'] = $description;
             $product['price'] = $price;
             $product['current_discount'] = $discount;
             $product['stock'] = $stock;
