@@ -10,7 +10,8 @@ class Products extends CI_Controller {
 
         $this->load->model(array(
             'product_model' => 'product',
-            'order_model' => 'order'
+            'order_model' => 'order',
+            'grosir_model' => 'grosir'
         ));
         $this->load->library('form_validation');
     }
@@ -360,9 +361,12 @@ class Products extends CI_Controller {
         {
             $data = $this->product->product_data($id);
 
+            $harga_grosir = $this->product->get_harga_grosir($id);
+
             $params['title'] = $data->name .' | SKU '. $data->sku;
 
             $product['product'] = $data;
+            $product['harga_grosir'] = $harga_grosir;
             $product['flash'] = $this->session->flashdata('product_flash');
             $product['orders'] = $this->order->product_ordered($id);
 
@@ -428,6 +432,7 @@ class Products extends CI_Controller {
         $this->output->set_content_type('application/json')
             ->set_output($response);
     }
+
 
     public function coupons()
     {
@@ -525,4 +530,5 @@ class Products extends CI_Controller {
         $this->output->set_content_type('application/json')
             ->set_output($response);
     }
+
 }

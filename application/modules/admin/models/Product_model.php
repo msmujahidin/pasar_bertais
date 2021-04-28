@@ -57,6 +57,13 @@ class Product_model extends CI_Model {
 
         return $data;
     }
+    
+    public function get_harga_grosir($id)
+    {
+        $this->db->where('product_id',$id);
+        $query = $this->db->get('harga_grosir');
+        return $query->result();
+    }
 
     public function delete_product_image($id)
     {
