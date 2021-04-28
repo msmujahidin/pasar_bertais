@@ -66,12 +66,15 @@ class Order_model extends CI_Model {
 
     public function order_items($id)
     {
+
         $items = $this->db->query("
             SELECT oi.id, oi.product_id, oi.order_id, oi.order_qty, oi.order_price, 
-            p.name, p.picture_name, p.no_location, p.no_sequence
+            p.name, p.picture_name, p.penjual, p.no_hp, p.lokasi, k.name as category
             FROM order_item oi
             JOIN products p
 	            ON p.id = oi.product_id
+            JOIN product_category k
+	            ON k.id = p.category_id
             WHERE order_id = '$id'");
 
         return $items->result();
