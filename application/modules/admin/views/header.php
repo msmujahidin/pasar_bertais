@@ -55,6 +55,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                </a>
              </li>
              <li class="nav-item">
+              <a class="nav-link" href="<?php echo site_url('admin/gambar'); ?>">
+                <i class="fas fa-image"></i>
+                <span class="nav-link-text">Gambar</span>
+              </a>
+            </li>
+             <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/products/category'); ?>">
                 <i class="ni ni-bullet-list-67 text-info"></i>
                 <span class="nav-link-text">Kategori Produk</span>
