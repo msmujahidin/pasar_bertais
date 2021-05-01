@@ -13,6 +13,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 	<link rel="icon" href="<?php echo base_url('assets/uploads/sites/Logo.png'); ?>">
 
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
     <link rel="stylesheet" href="<?php echo get_theme_uri('css/open-iconic-bootstrap.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo get_theme_uri('css/animate.css'); ?>">
     

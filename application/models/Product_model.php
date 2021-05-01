@@ -7,11 +7,14 @@ class Product_model extends CI_Model {
         parent::__construct();
     }
 
+    public function count_all_products()
+    {
+        return $this->db->get('products')->num_rows();
+    }
     public function get_all_products()
     {
-        return $this->db->get('products')->result();
+        return $this->db->order_by('name')->get('products', 20, 0)->result();
     }
-
     public function best_deal_product()
     {
         $data = $this->db->where('is_available', 1)
@@ -22,7 +25,6 @@ class Product_model extends CI_Model {
 
         return $data;
     }
-
     public function is_product_exist($id, $sku)
     {
         return ($this->db->where(array('id' => $id, 'sku' => $sku))->get('products')->num_rows() > 0) ? TRUE : FALSE;
@@ -57,4 +59,5 @@ class Product_model extends CI_Model {
     {
         return $this->db->insert_batch('order_item', $data);
     }
+    
 }

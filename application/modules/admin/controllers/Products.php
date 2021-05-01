@@ -22,7 +22,7 @@ class Products extends CI_Controller {
 
         $config['base_url'] = site_url('admin/products/index');
         $config['total_rows'] = $this->product->count_all_products();
-        $config['per_page'] = 16;
+        $config['per_page'] = 10;
         $config['uri_segment'] = 4;
         $choice = $config['total_rows'] / $config['per_page'];
         $config['num_links'] = floor($choice);
