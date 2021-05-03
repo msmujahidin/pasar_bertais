@@ -7,13 +7,27 @@ class Product_model extends CI_Model {
         parent::__construct();
     }
 
+    public function get_all_categories()
+    {
+        return $this->db->order_by('name', 'ASC')->get('product_category')->result();
+    }
+    
     public function count_all_products()
     {
         return $this->db->get('products')->num_rows();
     }
+
+    public function count_products_by_category($category_id)
+    {
+        return $this->db->where('category_id',$category_id)->get('products')->num_rows();
+    }
+
     public function get_all_products()
     {
-        return $this->db->order_by('name')->get('products', 20, 0)->result();
+        return $this->db->order_by('name')->get('products', 10, 0)->result();
+    }
+    public function get_products_by_category($category_id, $limit, $start){
+        return $this->db->order_by('name')->where('category_id',$category_id)->get('products', $limit, $start)->result();
     }
     public function best_deal_product()
     {

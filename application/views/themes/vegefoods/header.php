@@ -95,7 +95,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				  <?php endif; ?>
               </div>
             </li>
-	          <li class="nav-item cta cta-colored"><a href="<?php echo site_url('shop/cart'); ?>" class="nav-link"><span class="icon-shopping_cart"></span>[<span class="cart-item-total">0</span>]</a></li>
+	          <li class="nav-item cta cta-colored">
+			  <a href="<?php echo site_url('shop/cart'); ?>" class="nav-link">
+			  <span class="icon-shopping_cart"></span>
+			  [<span class="cart-item-total">0</span>]</a></li>
 
 	        </ul>
 	        

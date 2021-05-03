@@ -159,17 +159,17 @@ input[type=number]::-webkit-outer-spin-button {
             </div>
         </div>
     </div>
-    <div class="container px-0">
+    <div id="app" class="container px-0">
         <div class="row mb-5">
             <div class="col-md-12">
                 <div class="card border-0">
                     <div class="card-body">
                         <div class="float-right">
-                        <span>Kategori</span>
-                        <select name="" id="" class="select-kategori">
-                            <option value="1">Buah</option>
-                            <option value="1">Sayur</option>
-                        </select>
+                            <span>KATEGORI: </span>
+                            <select class="select-kategori" v-model="category" @change="onCategoryChange()">
+                                <option v-for="category in product_category"
+                                    v-bind:value="{ id: category.id, name: category.name }">{{category.name}}</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -177,37 +177,46 @@ input[type=number]::-webkit-outer-spin-button {
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Buah dan Sayur</h5>
-                        <?php foreach ($products as $product) : ?>
-                        <div class="row my-4">
-                            <div class="col-12 col-md-6">
-                                <div class="float-left mr-2">
-                                    <img width="100" class="img-fluid" src="<?php echo base_url('assets/uploads/products/'. $product->picture_name); ?>" alt="<?php echo $product->name; ?>" srcset="">
-                                </div>
-                                <div class="my-1">
-                                    <div>
-                                        <strong><?php echo $product->name; ?></strong>
+                        <h5 class="card-title mx-3 mb-4 mt-2">{{category.name}}</h5>
+                        <template v-for="(product, index) in products">
+                            <div class="row my-4">
+                                <div class="col-12 col-md-6">
+                                    <div class="float-left mr-2">
+                                        <img width="100" class="img-fluid" v-bind:src="img_url+product.picture_name"
+                                            v-bind:alt="product.name" srcset="">
                                     </div>
-                                    <div>
-                                        <span class="mr-2"><span class="price-sale">Rp <?php echo format_rupiah($product->price - $product->current_discount); ?></span>
+                                    <div class="my-1">
+                                        <div>
+                                            <strong>{{product.name }}</strong>
+                                        </div>
+                                        <div>
+                                            <span class="mr-2"><span class="price-sale">Rp
+                                                {{formatNumber(product.price)}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 my-auto">
+                                    <div class="float-right">
+                                        <div class="number-input">
+                                            <button v-on:click="orderDecrement(index)" class="minus"></button>
+                                            <input class="quantity" min="0" name="quantity"
+                                                v-model="product.jumlah_order" type="number">
+                                            <button v-on:click="orderIncrement(index)" class="plus"></button>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <div class="float-right">
+                                            <a href="#" class="btn btn-primary add-cart" v-bind:data-sku="product.sku"
+                                                v-bind:data-name="product.name" v-bind:data-price="product.price"
+                                                v-bind:data-qty="product.jumlah_order" v-bind:data-id="product.id"><i
+                                                    class="ion-ios-cart"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 my-auto">
-                                <div class="float-right">
-                                    <div class="number-input">
-                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                            class="minus"></button>
-                                        <input class="quantity" min="0" name="quantity" value="0" type="number">
-                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                            class="plus"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                        <div class="text-center">
-                            <button class="btn btn-sm btn-primary">Tampilkan Lebih Banyak</button>
+                        </template>
+                        <div class="text-center" v-if="more">
+                            <button class="btn btn-sm btn-primary" v-on:click="fetchProducts()">Tampilkan Lebih
+                                Banyak</button>
                         </div>
                     </div>
                 </div>
@@ -250,3 +259,78 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
     </div>
 </section>
+<script src="https://unpkg.com/vue@3.0.5"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+    integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+    crossorigin="anonymous"></script>
+<script>
+const app = Vue.createApp({
+    data() {
+        return {
+            img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
+            api_url: '<?= site_url('home/api'); ?>',
+            products: JSON.parse('<?= json_encode($products) ?>'),
+            limit: "<?= $limit ?>",
+            all_products: JSON.parse('<?= json_encode($all_products) ?>'),
+            product_category: JSON.parse('<?= json_encode($product_category) ?>'),
+            category: JSON.parse('<?= json_encode($category) ?>'),
+            total_products: JSON.parse('<?= json_encode($total_products) ?>'),
+            more: true,
+        }
+    },
+    mounted() {
+        this.$nextTick(function() {
+            if (this.products.length > 0) {
+                this.checkTotalProducts(this.products[0].category_id);
+            } else {
+                this.more = false;
+            }
+        })
+    },
+    methods: {
+        fetchProducts: function() {
+            const limit = this.limit;
+            const start = this.products.length;
+            const category_id = this.category.id;
+            axios.post("<?= site_url('home/api'); ?>", {
+                    category_id,
+                    limit,
+                    start
+                })
+                .then((response) => {
+                    this.products = this.products.concat(response.data);
+                    this.all_products[category_id] = this.products;
+                    this.checkTotalProducts(category_id);
+                }, (error) => {
+                    console.log(error);
+                });
+        },
+        checkTotalProducts: function(category_id) {
+            if (this.products.length == this.total_products[category_id]) {
+                this.more = false;
+            } else {
+                this.more = true;
+            }
+        },
+        onCategoryChange: function() {
+            const category_id = this.category.id;
+            this.products = this.all_products[category_id];
+            this.checkTotalProducts(category_id);
+        },
+        formatNumber(number) {
+            return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        },
+        orderIncrement: function(index) {
+            this.products[index].jumlah_order++;
+        },
+        orderDecrement: function(index) {
+            if (this.products[index].jumlah_order > 0) {
+                this.products[index].jumlah_order--;
+            }
+        }
+    }
+    // fetching data
+    // load more
+})
+app.mount('#app')
+</script>
