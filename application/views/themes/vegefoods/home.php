@@ -191,7 +191,7 @@ input[type=number]::-webkit-outer-spin-button {
                                         </div>
                                         <div>
                                             <span class="mr-2"><span class="price-sale">Rp
-                                                {{formatNumber(product.price)}}</span>
+                                                    {{formatNumber(product.price)}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -205,10 +205,9 @@ input[type=number]::-webkit-outer-spin-button {
                                         </div>
                                         &nbsp;&nbsp;&nbsp;
                                         <div class="float-right">
-                                            <a href="#" class="btn btn-primary add-cart" v-bind:data-sku="product.sku"
-                                                v-bind:data-name="product.name" v-bind:data-price="product.price"
-                                                v-bind:data-qty="product.jumlah_order" v-bind:data-id="product.id"><i
-                                                    class="ion-ios-cart"></i></a>
+                                            <button class="btn btn-primary" v-on:click="addCart(index)">
+                                                <i class="ion-ios-cart"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -281,9 +280,9 @@ const app = Vue.createApp({
     mounted() {
         this.$nextTick(function() {
             if (this.products.length > 0) {
-                this.checkTotalProducts(this.products[0].category_id);
-            } else {
-                this.more = false;
+                const category_id = this.products[0].category_id;
+                this.checkTotalProducts(category_id);
+                this.products = this.all_products[category_id];
             }
         })
     },
@@ -327,10 +326,34 @@ const app = Vue.createApp({
             if (this.products[index].jumlah_order > 0) {
                 this.products[index].jumlah_order--;
             }
+        },
+        addCart: function(index) {
+            // const category_id = this.products[index].category_id;
+            const product = this.products[index];
+            axios.post("<?= site_url('home/cart_api'); ?>", {
+                    id: product.id,
+                    sku: product.sku,
+                    qty: +!product.jumlah_order,
+                    price: product.price,
+                    name: product.name,
+                    action: 'add_item'
+                })
+                .then((response) => {
+                    console.log(response);
+                    if (response.status == 200) {
+                        const totalItem = response.data.total_item;
+
+                        $('.cart-item-total').text(totalItem);
+
+                        toastr.info('Item ditambahkan dalam keranjang');
+                    } else {
+                        console.log('Terjadi kesalahan');
+                    }
+                }, (error) => {
+                    console.log(error);
+                });
         }
     }
-    // fetching data
-    // load more
 })
 app.mount('#app')
 </script>

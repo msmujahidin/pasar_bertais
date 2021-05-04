@@ -151,6 +151,10 @@ class Shop extends CI_Controller {
                 $quantity = $this->session->userdata('order_quantity');
 
                 $user_id = get_current_user_id();
+                if($user_id == 0){
+                    $user_id = null;
+                }
+
                 $coupon_id = $this->session->userdata('coupon_id');
                 $order_number = $this->_create_order_number($quantity, $user_id, $coupon_id);
                 $order_date = date('Y-m-d H:i:s');

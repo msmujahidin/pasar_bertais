@@ -22,17 +22,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <div class="form-group">
                     <label for="name" class="form-control-label">Pengiriman untuk (nama):</label>
-                    <input type="text" name="name" value="<?php echo $customer->name; ?>" class="form-control" id="name" required>
+                    <input type="text" name="name" value="" class="form-control" id="name" required>
                 </div>
 
                 <div class="form-group">
                     <label for="hp" class="form-control-label">No. HP:</label>
-                    <input type="text" name="phone_number" value="<?php echo $customer->phone_number; ?>" class="form-control" id="hp" required>
+                    <input type="text" name="phone_number" value="" class="form-control" id="hp" required>
                 </div>
 
                 <div class="form-group">
                     <label for="address" class="form-control-label">Alamat:</label>
-                    <textarea name="address" class="form-control" id="address" required><?php echo $customer->address; ?></textarea>
+                    <textarea name="address" class="form-control" id="address" required></textarea>
                 </div>
 
                 <div class="form-group">

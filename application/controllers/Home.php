@@ -78,4 +78,35 @@ class Home extends CI_Controller {
                 ->set_output($response);
 
     }
+    public function cart_api()
+    {
+        $post_data = json_decode(file_get_contents("php://input"), true);
+
+        $action = $post_data['action'];
+        switch ($action)
+        {
+            case 'add_item' :
+                $id = $post_data['id'];
+                $qty = $post_data['qty'];
+                $sku = $post_data['sku'];
+                $name = $post_data['name'];
+                $price = $post_data['price'];
+                
+                $item = array(
+                    'id' => $id,
+                    'qty' => $qty,
+                    'price' => $price,
+                    'name' => $name
+                );
+                $this->cart->insert($item);
+                $total_item = count($this->cart->contents());
+
+                $response = array('code' => 200, 'message' => 'Item dimasukkan dalam keranjang', 'total_item' => $total_item);
+            break;
+        }
+
+        $response = json_encode($response);
+        $this->output->set_content_type('application/json')
+            ->set_output($response);
+    }
 }
