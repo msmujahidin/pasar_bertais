@@ -330,10 +330,14 @@ const app = Vue.createApp({
         addCart: function(index) {
             // const category_id = this.products[index].category_id;
             const product = this.products[index];
+            let qty = product.jumlah_order;
+            if(qty == 0){
+                qty = 1;
+            }
             axios.post("<?= site_url('home/cart_api'); ?>", {
                     id: product.id,
                     sku: product.sku,
-                    qty: +!product.jumlah_order,
+                    qty,
                     price: product.price,
                     name: product.name,
                     action: 'add_item'

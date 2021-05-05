@@ -51,6 +51,12 @@ class Shop extends CI_Controller {
         get_footer();
     }
     
+    public function greeting(){
+        get_header('Terimakasih');
+        get_template_part('shop/greeting');
+        get_footer();
+    }
+
     public function checkout($action = '')
     {
         // if ( ! is_login()) {
@@ -80,9 +86,9 @@ class Shop extends CI_Controller {
                 {
                     $items['rowid'] = $rowid;
                     $items['qty'] = $qty;
+                    
+                    $this->cart->update($items);
                 }
-
-                $this->cart->update($items);
 
                 if ( empty($coupon)) 
                 {
@@ -212,7 +218,7 @@ class Shop extends CI_Controller {
 
                 $this->session->set_flashdata('order_flash', 'Order berhasil ditambahkan');
 
-                redirect('customer/orders/view/'. $order);
+                redirect('shop/greeting');
             break;
         }
 

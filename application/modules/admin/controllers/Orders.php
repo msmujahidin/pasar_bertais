@@ -56,7 +56,10 @@ class Orders extends CI_Controller {
         $this->load->library('pagination', $config);
         $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
  
-        $orders['orders'] = $this->order->get_all_orders($config['per_page'], $page);
+        // $orders['orders'] = $this->order->get_all_orders($config['per_page'], $page);
+        $orders['orders'] = $this->order->get_all_orders_new($config['per_page'], $page);
+
+        // print_r($orders['orders'][0]->delivery_data);
         $orders['pagination'] = $this->pagination->create_links();
 
         $this->load->view('header', $params);

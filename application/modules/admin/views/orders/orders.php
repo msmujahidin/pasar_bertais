@@ -52,7 +52,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <th scope="col">
                       <?php echo anchor('admin/orders/view/'. $order->id, '#'. $order->order_number); ?>
                     </th>
-                    <td><?php echo $order->customer; ?></td>
+                    <td>
+                      <?php 
+                        $delivery = json_decode($order->delivery_data); 
+                        echo($delivery->customer->name);
+                      ?>
+                    </td>
                     <td>
                       <?php echo get_formatted_date($order->order_date); ?>
                     </td>

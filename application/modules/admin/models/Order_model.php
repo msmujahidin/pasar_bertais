@@ -12,6 +12,19 @@ class Order_model extends CI_Model {
         return $this->db->get('orders')->num_rows();
     }
 
+    public function get_all_orders_new($limit, $start)
+    {
+        $orders = $this->db->query("
+            SELECT o.id, o.order_number, o.delivery_data, o.order_date, o.order_status, o.payment_method, o.total_price, o.total_items, c.name AS coupon
+            FROM orders o
+            LEFT JOIN coupons c
+                ON c.id = o.coupon_id
+            ORDER BY o.order_date DESC
+            LIMIT $start, $limit
+        ");
+
+        return $orders->result();
+    }
     public function get_all_orders($limit, $start)
     {
         $orders = $this->db->query("
