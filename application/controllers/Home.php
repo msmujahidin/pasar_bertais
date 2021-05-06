@@ -91,17 +91,30 @@ class Home extends CI_Controller {
                 $sku = $post_data['sku'];
                 $name = $post_data['name'];
                 $price = $post_data['price'];
+                $picture_name = $post_data['picture_name'];
                 
                 $item = array(
                     'id' => $id,
                     'qty' => $qty,
                     'price' => $price,
+                    'picture_name' => $picture_name,
                     'name' => $name
                 );
                 $this->cart->insert($item);
                 $total_item = count($this->cart->contents());
 
                 $response = array('code' => 200, 'message' => 'Item dimasukkan dalam keranjang', 'total_item' => $total_item);
+            break;
+            case 'update_item' :
+                $rowid = $post_data['rowid'];
+                $qty = $post_data['qty'];
+                
+                $item = array(
+                    'rowid' => $rowid,
+                    'qty' => $qty,
+                );
+                $this->cart->update($item);
+                $response = array('code' => 200);
             break;
         }
 

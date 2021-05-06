@@ -7,6 +7,7 @@ class Shop extends CI_Controller {
 
         $this->load->library('cart');
         $this->load->model(array(
+            'grosir_model' => 'grosir',
             'product_model' => 'product',
             'customer_model' => 'customer'
         ));
@@ -40,7 +41,28 @@ class Shop extends CI_Controller {
 
     public function cart()
     {
-        $cart['carts'] = $this->cart->contents();
+        $carts = $this->cart->contents();
+
+        foreach($carts as $index => $product){
+
+            $grosir = $this->grosir->get_harga_grosir($product['id']);
+            $qty = $product['qty'];
+
+            foreach($grosir as $hrg){
+                if($hrg->jumlah_minimal <= $qty){
+                    $carts[$index]['price'] = $hrg->harga_satuan;
+                    $carts[$index]['subtotal'] = $hrg->harga_satuan * $qty;
+                    break;
+                }
+            }
+            $carts[$index]['grosir'] = $grosir;
+            
+            $this->cart->update($carts[$index]);
+        }
+
+        $cart['carts'] = $carts;
+
+        // print_r($carts);    
         $cart['total_cart'] = $this->cart->total();
 
         $ongkir = ($cart['total_cart'] >= get_settings('min_shop_to_free_shipping_cost')) ? 0 : get_settings('shipping_cost');

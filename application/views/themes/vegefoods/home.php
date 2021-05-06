@@ -339,6 +339,7 @@ const app = Vue.createApp({
                     sku: product.sku,
                     qty,
                     price: product.price,
+                    picture_name: product.picture_name,
                     name: product.name,
                     action: 'add_item'
                 })

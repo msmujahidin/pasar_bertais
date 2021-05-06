@@ -24,6 +24,12 @@ class Product_model extends CI_Model {
 
     public function get_all_products()
     {
+        // $this->db->select('*');
+        // $this->db->from('products p');
+        // $this->db->order_by('p.name');
+        // $this->db->join('harga_grosir h', 'h.product_id = p.id');
+        // $query = $this->db->get();
+        // return $query->result();
         return $this->db->order_by('name')->get('products', 10, 0)->result();
     }
     public function get_products_by_category($category_id, $limit, $start){
