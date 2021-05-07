@@ -93,21 +93,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/customers'); ?>">
                 <i class="fa fa-users text-primary"></i>
-                <span class="nav-link-text">Pelanggan</span>
+                <span class="nav-link-text">Reseler</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/reviews'); ?>">
                 <i class="fa fa-edit text-info"></i>
                 <span class="nav-link-text">Review Pelanggan</span>
               </a>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/contacts'); ?>">
                 <i class="fa fa-phone text-info"></i>
                 <span class="nav-link-text">Kontak</span>
               </a>
-            </li>
+            </li> -->
            </ul>
          </div>
        </div>

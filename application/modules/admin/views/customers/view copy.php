@@ -26,11 +26,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page content -->
     <div class="container-fluid mt--6">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
           <div class="card-wrapper">
             <div class="card">
               <div class="card-header">
-                <h3 class="mb-0">Data Reseler</h3>
+                <h3 class="mb-0">Data Pelanggan</h3>
                 <?php if ($flash) : ?>
                 <span class="float-right text-success font-weight-bold" style="margin-top: -30px;"><?php echo $flash; ?></span>
                 <?php endif; ?>
@@ -68,45 +68,90 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
 
         </div>
-        <div class="col-md-6">
-          <div class="card-wrapper">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="mb-0">Refral</h3>
-                <?php if ($flash) : ?>
-                <span class="float-right text-success font-weight-bold" style="margin-top: -30px;"><?php echo $flash; ?></span>
-                <?php endif; ?>
-              </div>
-              <div class="card-body p-0">
-                <table class="table align-items-center table-flush table-hover">
-                    <tr>
-                        <th><b>Kode Refral</b></th>
-                        <th><b><?php echo $customer->kode_refral; ?></b></th>
-                    </tr>
-                    <tr>
-                        <td>Nilai Refral</td>
-                        <td><b><?php echo $customer->nilai_refral; ?></b></td>
-                    </tr>
-                    <tr>
-                        <td>Jumlah Refral</td>
-                        <td><b><?php echo $customer->jumlah_refral; ?></b></td>
-                    </tr>
-                    <tr>
-                        <td>Keuntungan</td>
-                        <td><b><?php echo $customer->keuntungan; ?></b></td>
-                    </tr>
-                    <tr>
-                        <td>Diskon</td>
-                        <td><b><?php echo $customer->diskon; ?></b></td>
-                    </tr>
-                </table>
-              </div>
-              
+        <div class="col-md-7">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="mb-0">Riwayat Order</h3>
+                </div>
+                <div class="card-body <?php echo (count($orders) > 0) ? 'p-0' : ''; ?>">
+                    <?php if ( count($orders) > 0) : ?>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nomor</th>
+                                    <th scope="col">Jumlah Harga</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($orders as $order) : ?>
+                                <tr>
+                                    <th scope="col">
+                                        <?php echo $order->id; ?>
+                                    </th>
+                                    <td>
+                                        <?php echo anchor('admin/orders/view/'. $order->id, '#'. $order->order_number); ?>
+                                    </td>
+                                    <td>
+                                        Rp <?php echo format_rupiah($order->total_price); ?>
+                                    </td>
+                                    <td><?php echo get_order_status($order->order_status, '#'. $order->payment_method); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php else : ?>
+                    <div class="alert alert-info">Belum ada data pembayarn.</div>
+                    <?php endif; ?>
+                </div>
             </div>
-            
-          </div>
 
-        </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="mb-0">Riwayat Pembayaran</h3>
+                </div>
+                <div class="card-body <?php echo (count($payments) > 0) ? 'p-0' : ''; ?>">
+                    <?php if ( count($payments) > 0) : ?>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Order</th>
+                                    <th scope="col">Jumlah</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($payments as $payment) : ?>
+                                <tr>
+                                    <th scope="col">
+                                        <?php echo $payment->id; ?>
+                                    </th>
+                                    <td>
+                                        <?php echo anchor('admin/paymeny/view/'. $payment->id, $payment->order_number); ?>
+                                    </td>
+                                    <td>
+                                        Rp <?php echo format_rupiah($payment->payment_price); ?>
+                                    </td>
+                                    <td><?php echo get_payment_status($payment->payment_status); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php else : ?>
+                    <div class="alert alert-info">Belum ada data order.</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+              
+             
+        </div> <!-- col -->
       </div>
 
       <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">

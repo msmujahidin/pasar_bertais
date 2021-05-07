@@ -140,11 +140,13 @@ $(document).ready(function() {
         {"data": "phone_number"},
         {"data": "address"},
         {"mRender": function (data, type, row) {
-            var url = window.location.href.split('?')[0].replace('#', '');
-            url = url + '/edit/'+ row.id;
+            const url = window.location.href.split('?')[0].replace('#', '');
+            const url_edit = url + '/edit/'+ row.id;
+            const url_view = url + '/view/'+ row.id;
 
             return `<div class="text-right">
-                      <a href="${url}" data-id="${row.id}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                      <a href="${url_view}" data-id="${row.id}" class="btn btn-warning btn-sm"><i class="fa fa-eye"></i></a>
+                      <a href="${url_edit}" data-id="${row.id}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                       <a href="#" data-id="${row.id}" class="btn btn-danger btn-sm btnDelete"><i class="fa fa-trash"></i></a>
                     </div>`;
         }

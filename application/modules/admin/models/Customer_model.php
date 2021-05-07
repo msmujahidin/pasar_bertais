@@ -58,7 +58,7 @@ class Customer_model extends CI_Model {
     public function customer_data($id)
     {
         $customer = $this->db->query("
-            SELECT c.user_id as id, c.profile_picture, c.name, u.email, c.phone_number, c.address, u.register_date
+            SELECT c.user_id as id, c.profile_picture, c.name, u.email, c.phone_number, c.address, c.diskon, c.kode_refral, c.nilai_refral, c.jumlah_refral, c.keuntungan, u.register_date
             FROM customers c
             JOIN users u
                 ON u.id = c.user_id
