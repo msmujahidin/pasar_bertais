@@ -133,16 +133,20 @@ class Orders extends CI_Controller {
             $data = $this->order->order_data($order_id);
             $items = $this->order->order_items($order_id);
             $delivery_data = json_decode($data->delivery_data);
-            print_r($delivery_data->customer);
+            // print_r($delivery_data->customer);
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             
             $sheet->getColumnDimension('A')->setWidth(15);
             $sheet->getColumnDimension('B')->setWidth(18);
             $sheet->getColumnDimension('C')->setWidth(18);
-            $sheet->getColumnDimension('D')->setWidth(12);
+            $sheet->getColumnDimension('D')->setWidth(18);
             $sheet->getColumnDimension('E')->setWidth(8);
-            $sheet->getColumnDimension('F')->setWidth(15);
+            $sheet->getColumnDimension('F')->setWidth(14);
+            $sheet->getColumnDimension('G')->setWidth(14);
+            $sheet->getColumnDimension('H')->setWidth(14);
+            $sheet->getColumnDimension('I')->setWidth(14);
+            $sheet->getColumnDimension('J')->setWidth(14);
 
 
             // $sheet->getStyle('A3:F6')->getAlignment()->setVertical('center');
@@ -195,12 +199,16 @@ class Orders extends CI_Controller {
             $sheet->getStyle('A'.$i0.':J'.$i)->getAlignment()->setHorizontal('center');
 
             $file_name = 'report.xlsx';
+            // header('Content-Type: application/vnd.ms-excel');
+            // header('Content-Disposition: attachment;filename="'.$file_name.'"');
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'.$file_name.'"');
+            header('Cache-Control: max-age=0');
             $writer = new Xlsx($spreadsheet);
-            $writer->save($file_name);
-            $path = file_get_contents(base_url($file_name)); // get file name
-            force_download($file_name, $path); // start download`
+            $writer->save('php://output');
         }
-        redirect('admin/orders/view/'. $order_id.'#pesanan');
+        // redirect('admin/orders/view/'. $order_id.'#pesanan');
     }
 
     public function update_order_item($id){
