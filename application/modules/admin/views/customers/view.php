@@ -81,23 +81,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <table class="table align-items-center table-flush table-hover">
                     <tr>
                         <th><b>Kode Refral</b></th>
-                        <th><b><?php echo $customer->kode_refral; ?></b></th>
+                        <th><b><?php echo is_null($customer->kode_refral)?"#KOSONG#":$customer->kode_refral; ?></b></th>
                     </tr>
                     <tr>
                         <td>Nilai Refral</td>
-                        <td><b><?php echo $customer->nilai_refral; ?></b></td>
+                        <td><b><?php echo is_null($customer->nilai_refral)?0:$customer->nilai_refral; ?></b></td>
                     </tr>
                     <tr>
                         <td>Jumlah Refral</td>
-                        <td><b><?php echo $customer->jumlah_refral; ?></b></td>
+                        <td><b><?php echo is_null($customer->jumlah_refral)?0:$customer->jumlah_refral; ?></b></td>
                     </tr>
                     <tr>
                         <td>Keuntungan</td>
-                        <td><b><?php echo $customer->keuntungan; ?></b></td>
+                        <td><b><?php echo is_null($customer->keuntungan)?0:$customer->keuntungan;?></b></td>
                     </tr>
                     <tr>
                         <td>Diskon</td>
-                        <td><b><?php echo $customer->diskon; ?></b></td>
+                        <td><b><?php echo is_null($customer->diskon)?0:$customer->diskon; ?></b></td>
                     </tr>
                 </table>
               </div>

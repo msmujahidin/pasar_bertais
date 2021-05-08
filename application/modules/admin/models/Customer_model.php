@@ -17,6 +17,10 @@ class Customer_model extends CI_Model {
         return $this->db->order_by('id', 'DESC')->get('customers')->result();
     }
 
+    public function update($user_id, $data){
+        $this->db->where('user_id', $user_id)->update('customers', $data);
+    }
+
     public function get_all_customers()
     {
         $customers = $this->db->query("

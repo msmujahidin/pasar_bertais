@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <!-- Card header -->
             <div class="card-header">
               <h3 class="mb-0">Pelanggan</h3>
-              <a href="" class="btn btn-sm btn-primary">Tambah Pelanggan</a>
+              <a href="<?php echo site_url('admin/customers/create'); ?>" class="btn btn-sm btn-primary">Tambah Pelanggan</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
