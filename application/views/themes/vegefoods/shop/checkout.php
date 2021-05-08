@@ -13,7 +13,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     overflow-y: scroll;
     cursor: pointer;
 }
-.list-alamat:hover{
+
+.list-alamat:hover {
     background-color: #82ae46;
     color: #fff;
 }
@@ -51,8 +52,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <div class="form-group">
                         <label for="kecamatan" class="form-control-label">Kecamatan:</label>
-                        <input type="text" name="kecamatan" v-model="set_kecamatan"
-                            class="form-control" id="kecamatan" required disabled>
+                        <input type="text" name="kecamatan" v-model="set_kecamatan" :value="set_kecamatan"
+                            class="form-control" id="kecamatan" required readonly @click="toogleAlamatBox()">
+                        <input type="text" name="ongkir" v-model="ongkir" hidden>
                     </div>
                     <div class="form-group">
                         <div class="row">

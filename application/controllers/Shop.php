@@ -193,7 +193,9 @@ class Shop extends CI_Controller {
                 $order_date = date('Y-m-d H:i:s');
                 $total_price = $this->session->userdata('total_price');
                 $total_items = count($quantity);
-                $payment = $this->input->post('payment');
+                // $payment = $this->input->post('payment');
+                $kecamatan = $this->input->post('kecamatan');
+                $ongkir = $this->input->post('ongkir');
 
                 $name = $this->input->post('name');
                 $phone_number = $this->input->post('phone_number');
@@ -204,13 +206,13 @@ class Shop extends CI_Controller {
                     'customer' => array(
                         'name' => $name,
                         'phone_number' => $phone_number,
+                        'kecamatan' => $kecamatan,
                         'address' => $address
                     ),
                     'note' => $note
                 );
 
                 $delivery_data = json_encode($delivery_data);
-
                 $order = array(
                     'user_id' => $user_id,
                     'coupon_id' => $coupon_id,
@@ -218,8 +220,9 @@ class Shop extends CI_Controller {
                     'order_status' => 1,
                     'order_date' => $order_date,
                     'total_price' => $total_price,
+                    'ongkir' => $ongkir,
                     'total_items' => $total_items,
-                    'payment_method' => $payment,
+                    // 'payment_method' => $payment,
                     'delivery_data' => $delivery_data
                 );
 
