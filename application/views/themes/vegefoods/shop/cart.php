@@ -6,7 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="row no-gutters slider-text align-items-center justify-content-center">
             <div class="col-md-9 ftco-animate text-center">
                 <p class="breadcrumbs"><span class="mr-2"><?php echo anchor(base_url(), 'Home'); ?></span>
-                    <span>Keranjang Belanja</span></p>
+                    <span>Keranjang Belanja</span>
+                </p>
                 <h1 class="mb-0 bread">Keranjang Belanja Saya</h1>
             </div>
         </div>
@@ -67,8 +68,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row justify-content-end">
                 <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
                     <div class="cart-total mb-3">
-                        <h3>Kode Kupon</h3>
-                        <p>Punya kode kupon? Gunakan kupon kamu untuk mendapatkan potongan harga menarik</p>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenis_kupon" id="inlineRadio1"
+                                v-model="voucher" value="kode kupon" checked>
+                            <label class="form-check-label" for="inlineRadio1">Kode Kupon</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenis_kupon" id="inlineRadio2"
+                                v-model="voucher" value="kode refral">
+                            <label class="form-check-label" for="inlineRadio2">Kode Refral</label>
+                        </div>
+                        <br><br>
+                        <!-- <h3>Kode Kupon</h3> -->
+                        <p>Punya <strong>{{voucher}}</strong>? Gunakan {{voucher}} kamu untuk mendapatkan potongan harga menarik</p>
 
                         <div class="form-group">
                             <label for="code">Kode:</label>
@@ -127,6 +139,7 @@ const app = Vue.createApp({
             img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
             carts: JSON.parse('<?= json_encode($carts) ?>'),
             more: true,
+            voucher: "kode kupon",
             total_cart: '<?php echo $total_cart; ?>',
             total_price: '<?php echo $total_price; ?>',
         }

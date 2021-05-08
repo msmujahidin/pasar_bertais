@@ -7,6 +7,7 @@ class Shop extends CI_Controller {
 
         $this->load->library('cart');
         $this->load->model(array(
+            'alamat_model' => 'alamat',
             'grosir_model' => 'grosir',
             'product_model' => 'product',
             'customer_model' => 'customer'
@@ -81,15 +82,17 @@ class Shop extends CI_Controller {
 
     public function checkout($action = '')
     {
-        // if ( ! is_login()) {
-            $coupon = $this->input->post('coupon_code');
-            $quantity = $this->input->post('quantity');
+        $kecamatan = $this->alamat->getAll();
 
-            $this->session->set_userdata('_temp_coupon', $coupon);
-            $this->session->set_userdata('_temp_quantity', $quantity);
+        $jenis_kupon = $this->input->post('jenis_kupon');
 
-        //     verify_session('customer');
-        // }
+        $coupon = $this->input->post('coupon_code');
+        $quantity = $this->input->post('quantity');
+
+        $this->session->set_userdata('_temp_coupon', $coupon);
+        $this->session->set_userdata('_temp_quantity', $quantity);
+
+
         switch ($action)
         {
             default :
@@ -167,6 +170,8 @@ class Shop extends CI_Controller {
                 $params['ongkir'] = ($ongkir > 0) ? 'Rp'. format_rupiah($ongkir) : 'Gratis';
                 $params['total'] = $subtotal + $ongkir - $discount;
                 $params['discount'] = $disc;
+                
+                $params['kecamatan'] = $kecamatan;
 
                 $this->session->set_userdata('order_quantity', $items);
                 $this->session->set_userdata('total_price', $params['total']);

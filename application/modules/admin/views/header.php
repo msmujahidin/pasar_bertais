@@ -84,12 +84,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <span class="nav-link-text">Kupon</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/payments'); ?>">
                 <i class="fa fa-money-bill-alt text-warning"></i>
                 <span class="nav-link-text">Pembayaran</span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/customers'); ?>">
                 <i class="fa fa-users text-primary"></i>
