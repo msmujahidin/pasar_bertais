@@ -62,91 +62,6 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center;
 }
 </style>
-<!-- <section id="home-section" class="hero">
-    <div class="home-slider owl-carousel">
-        <div class="slider-item" style="background-image: url(<?php echo get_theme_uri('images/'.$foto1); ?>);">
-            <div class="overlay"></div>
-            <div class="container">
-                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
-
-                    <div class="col-md-12 ftco-animate text-center">
-                        <h1 class="mb-2">Kami Menjual Hanya Sayuran dan Buah Terbaik</h1>
-                        <h2 class="subheading mb-4">Sayur dan Buah Segar Langsung dari Kebun</h2>
-                        <p><a href="#products" class="btn btn-primary">Belanja Sekarang</a></p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="slider-item" style="background-image: url(<?php echo get_theme_uri('images/'.$foto2); ?>);">
-            <div class="overlay"></div>
-            <div class="container">
-                <div class="row slider-text justify-content-center align-items-center" data-scrollax-parent="true">
-
-                    <div class="col-sm-12 ftco-animate text-center">
-                        <h1 class="mb-2">100% Sayur dan Buah Segar</h1>
-                        <h2 class="subheading mb-4">Sayur dan Buah Segar Langsung dari Kebun</h2>
-                        <p><a href="#products" class="btn btn-primary">Belanja Sekarang</a></p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-
-<!-- <section class="ftco-section" id="products">
-    <div class="container">
-        <div class="row no-gutters ftco-services">
-            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                <div class="media block-6 services mb-md-0 mb-4">
-                    <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
-                        <span class="flaticon-shipped"></span>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="heading">Gratis Ongkir</h3>
-                        <span>Belanja minimal Rp
-                            <?php echo format_rupiah(get_settings('min_shop_to_free_shipping_cost')); ?></span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                <div class="media block-6 services mb-md-0 mb-4">
-                    <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
-                        <span class="flaticon-diet"></span>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="heading">Selalu Segar</h3>
-                        <span>Dipetik Langsung dari Kebun</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                <div class="media block-6 services mb-md-0 mb-4">
-                    <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
-                        <span class="flaticon-award"></span>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="heading">Kualitas Terbaik</h3>
-                        <span>Kualitas dari Pertanian Terbaik</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-                <div class="media block-6 services mb-md-0 mb-4">
-                    <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
-                        <span class="flaticon-customer-service"></span>
-                    </div>
-                    <div class="media-body">
-                        <h3 class="heading">Bantuan</h3>
-                        <span>Bantuan 24/7 Selalu Online</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
 
 
 <section class="ftco-section">
@@ -161,19 +76,6 @@ input[type=number]::-webkit-outer-spin-button {
     </div>
     <div id="app" class="container px-0">
         <div class="row mb-5">
-            <!-- <div class="col-md-12">
-                <div class="card border-0">
-                    <div class="card-body">
-                        <div class="float-right">
-                            <span>KATEGORI: </span>
-                            <select class="select-kategori" v-model="category" @change="onCategoryChange()">
-                                <option v-for="category in product_category"
-                                    v-bind:value="{ id: category.id, name: category.name }">{{category.name}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="col-md-12 mb-5" v-for="category in product_category" >
                 <div class="card">
                     <div class="card-body">
@@ -224,40 +126,10 @@ input[type=number]::-webkit-outer-spin-button {
         </div>
         <center>
             <a class="btn btn-primary" href="<?php echo site_url('shop/cart'); ?>" role="button">Pesan Sekarang</a>
-            <!-- <button type="button" class="btn btn-success" href="#" > Success</button> -->
         </center>
     </div>
 </section>
 
-<!-- <section class="ftco-section img" style="background-image: url(<?php echo get_theme_uri('images/bg_3.jpg'); ?>);">
-    <div class="container">
-        <div class="row justify-content-end">
-            <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate  ">
-                <span class="subheading">Produk dengan Harga Terbaik</span>
-                <h2 class="mb-4">Deal of the day</h2>
-                <p><?php echo $best_deal->description; ?></p>
-                <h3><a href="#"><?php echo $best_deal->name; ?></a></h3>
-                <span class="price">Rp <?php echo format_rupiah($best_deal->price); ?> <a href="#">sekarang hanya Rp
-                        <?php echo format_rupiah($best_deal->price - $best_deal->current_discount); ?></a></span>
-                <div id="timer" class="d-flex mt-5">
-                    <div class="time pl-3">
-                        <a href="#" class="btn btn-primary add-cart" data-sku="<?php echo $best_deal->sku; ?>"
-                            data-name="<?php echo $best_deal->name; ?>"
-                            data-price="<?php echo ($best_deal->current_discount > 0) ? ($best_deal->price - $best_deal->current_discount) : $best_deal->price; ?>"
-                            data-id="<?php echo $best_deal->id; ?>"><i class="ion-ios-cart"></i></a>
-                    </div>
-                    <div class="time pl-3">
-                        <a class="btn btn-info"
-                            href="<?php echo site_url('shop/product/'. $best_deal->id .'/'. $best_deal->sku .'/'); ?>"
-                            class="buy-now d-flex justify-content-center align-items-center text-center">
-                            <span><i class="ion-ios-menu text-white"></i></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
 <script src="https://unpkg.com/vue@3.0.5"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
     integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="

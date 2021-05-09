@@ -100,11 +100,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </p>
                                 <p class="d-flex">
                                     <span>Ongkos kirim</span>
-                                    <span>{{ formatNumber(ongkir)}}</span>
+                                    <span v-if="!refral">{{ formatNumber(ongkir)}}</span>
+                                    <span v-else><strong>GRATIS</strong></span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>Kode Refral</span>
+                                    <span><?php echo $refral_text; ?></span>
                                 </p>
                                 <p class="d-flex">
                                     <span>Kupon</span>
-                                    <span><?php echo $discount; ?></span>
+                                    <span><?php echo $discount_text; ?></span>
+                                    <input type="text" name="discount" id="" value="<?= $discount ?>">
                                 </p>
                                 <hr>
                                 <p class="d-flex total-price">
@@ -114,25 +120,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <!-- <div class="cart-detail p-3 p-md-4">
-                                <h3 class="billing-heading mb-4">Metode Pembayaran</h3>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="radio">
-                                            <label><input type="radio" name="payment" class="mr-2" value="1"> Transfer
-                                                bank</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="radio">
-                                            <label><input type="radio" name="payment" class="mr-2" value="2" checked>
-                                                Bayar ditempat</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
 
                         </div>
 
@@ -159,6 +146,8 @@ const app = Vue.createApp({
             img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
             kecamatan: JSON.parse('<?= json_encode($kecamatan) ?>'),
             subtotal: '<?= $subtotal ?>',
+            discount: '<?= $discount ?>',
+            refral: '<?= $refral ?>',
             total: '<?= $total ?>',
             kec: {},
             set_kecamatan: '',
@@ -171,9 +160,12 @@ const app = Vue.createApp({
         }
     },
     mounted() {
-        // this.kec = this.kecamatan[0];
-        // this.setKecamatan();
-        // this.setTotal();
+        if(!this.refral){
+            this.refral = false;
+        }else{
+            this.refral = true;
+        }
+        console.log(this.refral)
     },
     methods: {
         toogleAlamatBox() {
@@ -186,7 +178,11 @@ const app = Vue.createApp({
             }
         },
         setTotal() {
-            this.total = parseInt(this.subtotal) + parseInt(this.ongkir);
+            if(this.refral){
+                this.total = parseInt(this.subtotal);
+            }else{
+                this.total = parseInt(this.subtotal) + parseInt(this.ongkir) -parseInt(this.discount);
+            }
         },
         setKecamatan(index) {
             let kec = this.kecamatan[index];

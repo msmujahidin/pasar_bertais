@@ -85,7 +85,7 @@ class Shop extends CI_Controller {
         $kecamatan = $this->alamat->getAll();
 
         $jenis_kupon = $this->input->post('jenis_kupon');
-
+        echo $jenis_kupon;
         $coupon = $this->input->post('coupon_code');
         $quantity = $this->input->post('quantity');
 
@@ -98,14 +98,24 @@ class Shop extends CI_Controller {
             default :
                 $coupon = $this->input->post('coupon_code') ? $this->input->post('coupon_code') : $this->session->userdata('_temp_coupon');
                 $quantity = $this->input->post('quantity') ? $this->input->post('quantity') : $this->session->userdata('_temp_quantity');
-
+                $coupon_data = [];
                 if ($this->session->userdata('_temp_quantity') || $this->session->userdata('_temp_coupon'))
                 {
                     $this->session->unset_userdata('_temp_coupon');
                     $this->session->unset_userdata('_temp_quantity');
                 }
+                $refral_text = "-";
+                $refral = null;
 
-                if ( empty($coupon)) 
+                if($jenis_kupon == "kode refral"){
+                    if ($this->customer->is_refral_exist($coupon)){
+                        $refral_text = '<span class="badge badge-success">'. $coupon .'</span>';
+                        $refral = true;
+                        $this->session->set_userdata('_temp_refral', true);
+                    }
+                }
+
+                if ( empty($coupon) || $jenis_kupon == "kode refral") 
                 {
                     $discount = 0;
                     $disc = 'Tidak menggunkan kupon';
@@ -126,9 +136,10 @@ class Shop extends CI_Controller {
                                 $coupon_id = $this->customer->get_coupon_id($coupon);
                                 $this->session->set_userdata('coupon_id', $coupon_id);
 
-                                $credit = $this->customer->get_coupon_credit($coupon);
+                                $coupon_data = $this->customer->get_coupon_data($coupon);
+                                $credit = $coupon_data->credit;
                                 $discount = $credit;
-                                $disc = '<span class="badge badge-success">'. $coupon .'</span> Rp '. format_rupiah($credit);
+                                $disc = '<span class="badge badge-success">'. $coupon .'</span> - Rp '. format_rupiah($credit);
                             }
                         }
                         else
@@ -156,15 +167,18 @@ class Shop extends CI_Controller {
 
                 $params['customer'] = $this->customer->data();
                 $params['subtotal'] = $subtotal;
-                $params['ongkir'] = ($ongkir > 0) ? 'Rp'. format_rupiah($ongkir) : 'Gratis';
-                $params['total'] = $subtotal + $ongkir - $discount;
-                $params['discount'] = $disc;
-                
+                $params['total'] = $subtotal - $discount;
+                $params['discount'] = $discount;
+                $params['discount_text'] = $disc;
+                $params['refral_text'] = $refral_text;
+                $params['refral'] = $refral;
+                echo $refral;
                 $params['kecamatan'] = $kecamatan;
 
                 $this->session->set_userdata('order_quantity', $items);
                 $this->session->set_userdata('total_price', $params['total']);
 
+                print_r($coupon_data);
                 get_header('Checkout');
                 get_template_part('shop/checkout', $params);
                 get_footer();
@@ -184,6 +198,7 @@ class Shop extends CI_Controller {
                 // $payment = $this->input->post('payment');
                 $kecamatan = $this->input->post('kecamatan');
                 $ongkir = $this->input->post('ongkir');
+                $discount = $this->input->post('discount');
                 $subtotal = $this->input->post('subtotal');
                 $total_price = $this->input->post('total_price');
 
@@ -202,6 +217,10 @@ class Shop extends CI_Controller {
                     'note' => $note
                 );
 
+                if ($this->session->userdata('_temp_refral')){
+                    $ongkir = 0;
+                    $this->session->unset_userdata('_temp_refral');
+                }
                 $delivery_data = json_encode($delivery_data);
                 $order = array(
                     'user_id' => $user_id,
@@ -212,6 +231,7 @@ class Shop extends CI_Controller {
                     'subtotal' => $subtotal,
                     'total_price' => $total_price,
                     'ongkir' => $ongkir,
+                    'discount' => $discount,
                     'total_items' => $total_items,
                     // 'payment_method' => $payment,
                     'delivery_data' => $delivery_data

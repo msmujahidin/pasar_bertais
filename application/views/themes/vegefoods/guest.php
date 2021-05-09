@@ -69,11 +69,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <h3>Rincian Pesanan</h3>
                     <p class="d-flex">
                         <span>Subtotal</span>
-                        <span class="n-subtotal font-weight-bold">Rp {{formatNumber(subtotal)}}</span>
+                        <span class="n-subtotal">Rp {{formatNumber(subtotal)}}</span>
                     </p>
                     <p class="d-flex">
                         <span>Biaya pengiriman</span>
-                        <span class="n-ongkir font-weight-bold">Rp {{formatNumber(ongkir)}}</span>
+                        <span class="n-ongkir">Rp {{formatNumber(ongkir)}}</span>
+                    </p>
+                    <p class="d-flex">
+                        <span>Potongan Harga</span>
+                        <span class="n-discount"><i>- Rp {{formatNumber(discount)}}</i></span>
                     </p>
                     <hr>
                     <p class="d-flex total-price">
@@ -128,6 +132,7 @@ const app = Vue.createApp({
             total_price: '<?= $data->total_price ?>',
             subtotal: '<?= $data->subtotal ?>',
             ongkir: '<?= $data->ongkir ?>',
+            discount: '<?= $data->discount ?>',
             order_number: '<?= $data->order_number ?>',
             order_status: '<?= $data->order_status ?>',
             status: [

@@ -14,6 +14,11 @@ class Customer_model extends CI_Model {
         $data = $this->db->where('user_id', $id)->get('customers')->row();
         return $data;
     }
+    
+    public function is_refral_exist($code)
+    {
+        return ($this->db->where('kode_refral', $code)->get('customers')->num_rows() > 0) ? TRUE : FALSE;
+    }
 
     public function is_coupon_exist($code)
     {
@@ -39,6 +44,10 @@ class Customer_model extends CI_Model {
         $credit = $data->credit;
 
         return $credit;
+    }
+    public function get_coupon_data($code)
+    {
+        return $this->db->where('code', $code)->get('coupons')->row();
     }
 
     public function get_coupon_id($code)
