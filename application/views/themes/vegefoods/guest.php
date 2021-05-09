@@ -20,6 +20,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="col-md-12 text-center mb-5">
                 <h4>Terimakasih Telah Melakukan Pemesanan</h4>
                 <h4>No Pesanan Anda #{{order_number}}</h4>
+                <h4><span class="badge badge-primary">{{status[order_status]}}</span></h4>
+            </div>
+            <div class="col-md-12">
             </div>
             <div class="col-md-12 ftco-animate">
                 <div class="cart-list">
@@ -103,7 +106,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span>Catatan</span>
                         <span class="font-weight-bold">{{note}}</span>
                     </p>
-                    <hr>
                 </div>
 
             </div>
@@ -127,6 +129,15 @@ const app = Vue.createApp({
             subtotal: '<?= $data->subtotal ?>',
             ongkir: '<?= $data->ongkir ?>',
             order_number: '<?= $data->order_number ?>',
+            order_status: '<?= $data->order_status ?>',
+            status: [
+                "",
+                 "Menunggu Konfirmasi",
+                 "Dalam Proses",
+                 "Dalam Pengiriman",
+                 "Selesai",
+                 "Batalkan",
+            ],
         }
     },
     mounted() {},
