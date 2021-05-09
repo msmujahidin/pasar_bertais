@@ -62,7 +62,7 @@ input[type=number]::-webkit-outer-spin-button {
     text-align: center;
 }
 </style>
-<section id="home-section" class="hero">
+<!-- <section id="home-section" class="hero">
     <div class="home-slider owl-carousel">
         <div class="slider-item" style="background-image: url(<?php echo get_theme_uri('images/'.$foto1); ?>);">
             <div class="overlay"></div>
@@ -94,9 +94,9 @@ input[type=number]::-webkit-outer-spin-button {
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
-<section class="ftco-section" id="products">
+<!-- <section class="ftco-section" id="products">
     <div class="container">
         <div class="row no-gutters ftco-services">
             <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
@@ -146,7 +146,7 @@ input[type=number]::-webkit-outer-spin-button {
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 
 <section class="ftco-section">
@@ -161,7 +161,7 @@ input[type=number]::-webkit-outer-spin-button {
     </div>
     <div id="app" class="container px-0">
         <div class="row mb-5">
-            <div class="col-md-12">
+            <!-- <div class="col-md-12">
                 <div class="card border-0">
                     <div class="card-body">
                         <div class="float-right">
@@ -173,12 +173,12 @@ input[type=number]::-webkit-outer-spin-button {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12">
+            </div> -->
+            <div class="col-md-12 mb-5" v-for="category in product_category" >
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title mx-3 mb-4 mt-2">{{category.name}}</h5>
-                        <template v-for="(product, index) in products">
+                        <template v-for="(product, index) in all_products[category.id]">
                             <div class="row my-4">
                                 <div class="col-12 col-md-6">
                                     <div class="float-left mr-2">
@@ -198,14 +198,14 @@ input[type=number]::-webkit-outer-spin-button {
                                 <div class="col-12 col-md-6 my-auto">
                                     <div class="float-right">
                                         <div class="number-input">
-                                            <button v-on:click="orderDecrement(index)" class="minus"></button>
+                                            <button v-on:click="orderDecrement(index, product.category_id)" class="minus"></button>
                                             <input class="quantity" min="0" name="quantity"
                                                 v-model="product.jumlah_order" type="number">
-                                            <button v-on:click="orderIncrement(index)" class="plus"></button>
+                                            <button v-on:click="orderIncrement(index, product.category_id)" class="plus"></button>
                                         </div>
                                         &nbsp;&nbsp;&nbsp;
                                         <div class="float-right">
-                                            <button class="btn btn-primary" v-on:click="addCart(index)">
+                                            <button class="btn btn-primary" v-on:click="addCart(index, product.category_id)">
                                                 <i class="ion-ios-cart"></i>
                                             </button>
                                         </div>
@@ -213,8 +213,8 @@ input[type=number]::-webkit-outer-spin-button {
                                 </div>
                             </div>
                         </template>
-                        <div class="text-center" v-if="more">
-                            <button class="btn btn-sm btn-primary" v-on:click="fetchProducts()">Tampilkan Lebih
+                        <div class="text-center" v-if="more[category.id]">
+                            <button class="btn btn-sm btn-primary" v-on:click="fetchProducts(category.id)">Tampilkan Lebih
                                 Banyak</button>
                         </div>
                     </div>
@@ -229,7 +229,7 @@ input[type=number]::-webkit-outer-spin-button {
     </div>
 </section>
 
-<section class="ftco-section img" style="background-image: url(<?php echo get_theme_uri('images/bg_3.jpg'); ?>);">
+<!-- <section class="ftco-section img" style="background-image: url(<?php echo get_theme_uri('images/bg_3.jpg'); ?>);">
     <div class="container">
         <div class="row justify-content-end">
             <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate  ">
@@ -257,7 +257,7 @@ input[type=number]::-webkit-outer-spin-button {
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <script src="https://unpkg.com/vue@3.0.5"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
     integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -274,41 +274,45 @@ const app = Vue.createApp({
             product_category: JSON.parse('<?= json_encode($product_category) ?>'),
             category: JSON.parse('<?= json_encode($category) ?>'),
             total_products: JSON.parse('<?= json_encode($total_products) ?>'),
-            more: true,
+            more: [],
         }
     },
     mounted() {
         this.$nextTick(function() {
             if (this.products.length > 0) {
+                let more = [];
+                for(let i=0; i< this.product_category.length; i++){
+                    more[this.product_category[i].id] = true;
+                }
+                this.more = more;
                 const category_id = this.products[0].category_id;
                 this.checkTotalProducts(category_id);
                 this.products = this.all_products[category_id];
+                console.log(this.more);
             }
         })
     },
     methods: {
-        fetchProducts: function() {
+        fetchProducts: function(category_id) {
             const limit = this.limit;
-            const start = this.products.length;
-            const category_id = this.category.id;
+            const start = this.all_products[category_id].length;
             axios.post("<?= site_url('home/api'); ?>", {
                     category_id,
                     limit,
                     start
                 })
                 .then((response) => {
-                    this.products = this.products.concat(response.data);
-                    this.all_products[category_id] = this.products;
+                    this.all_products[category_id] = this.all_products[category_id].concat(response.data);
                     this.checkTotalProducts(category_id);
                 }, (error) => {
                     console.log(error);
                 });
         },
         checkTotalProducts: function(category_id) {
-            if (this.products.length == this.total_products[category_id]) {
-                this.more = false;
+            if (this.all_products[category_id].length == this.total_products[category_id]) {
+                this.more[category_id] = false;
             } else {
-                this.more = true;
+                this.more[category_id] = true;
             }
         },
         onCategoryChange: function() {
@@ -319,16 +323,18 @@ const app = Vue.createApp({
         formatNumber(number) {
             return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
         },
-        orderIncrement: function(index) {
+        orderIncrement: function(index, category_id) {
+            this.products = this.all_products[category_id];
             this.products[index].jumlah_order++;
         },
-        orderDecrement: function(index) {
+        orderDecrement: function(index, category_id) {
+            this.products = this.all_products[category_id];
             if (this.products[index].jumlah_order > 0) {
                 this.products[index].jumlah_order--;
             }
         },
-        addCart: function(index) {
-            // const category_id = this.products[index].category_id;
+        addCart: function(index, category_id) {
+            this.products = this.all_products[category_id];
             const product = this.products[index];
             let qty = product.jumlah_order;
             if(qty == 0){

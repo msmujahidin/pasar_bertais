@@ -44,10 +44,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <script src="<?php echo get_theme_uri('js/jquery.min.js'); ?>"></script>
     <script src="<?php echo get_theme_uri('js/jquery-migrate-3.0.1.min.js'); ?>"></script>
+    <style>
+
+    </style>
 </head>
 
 <body class="goto-here">
-    <div class="py-1 bg-primary">
+    <div class="py-1 bg-primary d-none d-md-block">
         <div class="container">
             <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
                 <div class="col-lg-12 d-block">
@@ -73,15 +76,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="<?php echo base_url(); ?>"><?php echo get_store_name(); ?></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+            <a class="navbar-brand d-none d-md-block" href="<?php echo base_url(); ?>"><?php echo get_store_name(); ?></a>
+            <button class="navbar-toggler d-none d-md-block" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
