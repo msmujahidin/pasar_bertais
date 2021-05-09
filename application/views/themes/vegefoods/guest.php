@@ -17,6 +17,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <section class="ftco-section ftco-Keranjang Belanja" id="app">
     <div class="container">
         <div class="row">
+            <div class="col-md-12 text-center mb-5">
+                <h4>Terimakasih Telah Melakukan Pemesanan</h4>
+                <h4>No Pesanan Anda #{{order_number}}</h4>
+            </div>
             <div class="col-md-12 ftco-animate">
                 <div class="cart-list">
                     <table class="table">
@@ -75,7 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </p>
                 </div>
             </div>
-            
+
             <div class="col-lg-8 mt-5 cart-wrap ftco-animate">
                 <div class="cart-total mb-3">
                     <h3>Data Penerima</h3>
@@ -122,6 +126,7 @@ const app = Vue.createApp({
             total_price: '<?= $data->total_price ?>',
             subtotal: '<?= $data->subtotal ?>',
             ongkir: '<?= $data->ongkir ?>',
+            order_number: '<?= $data->order_number ?>',
         }
     },
     mounted() {},

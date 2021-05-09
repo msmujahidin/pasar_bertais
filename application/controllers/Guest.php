@@ -19,7 +19,6 @@ class Guest extends CI_Controller {
             $order['data'] = $data;
             $order['items'] = $items;
             $order['delivery_data'] = json_decode($data->delivery_data);
-
             get_header('Pesanan');
             get_template_part('guest', $order);
             get_footer();
