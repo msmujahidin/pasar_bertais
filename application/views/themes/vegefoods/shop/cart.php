@@ -172,14 +172,15 @@ const app = Vue.createApp({
             }
             this.carts[id]['subtotal'] = this.carts[id]['price'] * jml;
             this.getTotalCart();
-            this.updateCart(id);
+            this.updateCart(id, this.carts[id]['price']);
         },
-        updateCart: function(index) {
+        updateCart: function(index, price) {
             const cart = this.carts[index];
             const qty = cart.qty;
             axios.post("<?= site_url('home/cart_api'); ?>", {
                     rowid: cart.rowid,
                     qty,
+                    price,
                     action: 'update_item'
                 })
                 .then((response) => {

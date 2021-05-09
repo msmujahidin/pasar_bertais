@@ -55,6 +55,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <input type="text" name="kecamatan" v-model="set_kecamatan" :value="set_kecamatan"
                             class="form-control" id="kecamatan" required readonly @click="toogleAlamatBox()">
                         <input type="text" name="ongkir" v-model="ongkir" hidden>
+                        <input type="text" name="subtotal" v-model="subtotal" hidden>
+                        <input type="text" name="total_price" v-model="total" hidden>
                     </div>
                     <div class="form-group">
                         <div class="row">

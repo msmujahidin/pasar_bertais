@@ -108,10 +108,12 @@ class Home extends CI_Controller {
             case 'update_item' :
                 $rowid = $post_data['rowid'];
                 $qty = $post_data['qty'];
+                $price = $post_data['price'];
                 
                 $item = array(
                     'rowid' => $rowid,
                     'qty' => $qty,
+                    'price' => $price,
                 );
                 $this->cart->update($item);
                 $response = array('code' => 200);

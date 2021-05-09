@@ -105,16 +105,6 @@ class Shop extends CI_Controller {
                     $this->session->unset_userdata('_temp_quantity');
                 }
 
-                $items = [];
-
-                foreach ($quantity as $rowid => $qty)
-                {
-                    $items['rowid'] = $rowid;
-                    $items['qty'] = $qty;
-                    
-                    $this->cart->update($items);
-                }
-
                 if ( empty($coupon)) 
                 {
                     $discount = 0;
@@ -161,7 +151,6 @@ class Shop extends CI_Controller {
                     $items[$item['id']]['qty'] = $item['qty'];
                     $items[$item['id']]['price'] = $item['price'];
                 }
-                 
                 $subtotal = $this->cart->total();
                 $ongkir = (int) ($subtotal >= get_settings('min_shop_to_free_shipping_cost')) ? 0 : get_settings('shipping_cost');
 
@@ -182,7 +171,7 @@ class Shop extends CI_Controller {
             break;
             case 'order' :
                 $quantity = $this->session->userdata('order_quantity');
-
+                
                 $user_id = get_current_user_id();
                 if($user_id == 0){
                     $user_id = null;
@@ -191,11 +180,12 @@ class Shop extends CI_Controller {
                 $coupon_id = $this->session->userdata('coupon_id');
                 $order_number = $this->_create_order_number($quantity, $user_id, $coupon_id);
                 $order_date = date('Y-m-d H:i:s');
-                $total_price = $this->session->userdata('total_price');
                 $total_items = count($quantity);
                 // $payment = $this->input->post('payment');
                 $kecamatan = $this->input->post('kecamatan');
                 $ongkir = $this->input->post('ongkir');
+                $subtotal = $this->input->post('subtotal');
+                $total_price = $this->input->post('total_price');
 
                 $name = $this->input->post('name');
                 $phone_number = $this->input->post('phone_number');
@@ -219,6 +209,7 @@ class Shop extends CI_Controller {
                     'order_number' => $order_number,
                     'order_status' => 1,
                     'order_date' => $order_date,
+                    'subtotal' => $subtotal,
                     'total_price' => $total_price,
                     'ongkir' => $ongkir,
                     'total_items' => $total_items,
@@ -248,7 +239,7 @@ class Shop extends CI_Controller {
 
                 $this->session->set_flashdata('order_flash', 'Order berhasil ditambahkan');
 
-                redirect('shop/greeting');
+                redirect('guest/order/'.$order_number);
             break;
         }
 
