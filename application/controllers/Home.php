@@ -14,10 +14,10 @@ class Home extends CI_Controller {
     }
 
     public function index() {
-        $params['title'] = 'Selamat Datang di Pasar Bertais';
+        $data['title'] = 'Selamat Datang di Pasar Bertais';
         $gambar = $this->gambar->getGambar();
-        $params['foto1'] = $gambar[0]->foto;
-        $params['foto2'] = $gambar[1]->foto;
+        $data['foto1'] = $gambar[0]->foto;
+        $data['foto2'] = $gambar[1]->foto;
 
         $product_category = $this->product->get_all_categories();
         $category = "";
@@ -57,7 +57,6 @@ class Home extends CI_Controller {
         $data['best_deal'] = $this->product->best_deal_product();
         $data['reviews'] = $this->review->get_all_reviews();
 
-        get_header($params);
         get_template_part('home', $data);
         get_footer();
     }
@@ -77,6 +76,12 @@ class Home extends CI_Controller {
             $this->output->set_content_type('application/json')
                 ->set_output($response);
 
+    }
+    public function search(){
+        $data = json_decode(file_get_contents("php://input"), true);
+        $search = $data['search'];
+        // $this->product->get_products_by_category
+        
     }
     public function cart_api()
     {
