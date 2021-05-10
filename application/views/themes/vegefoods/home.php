@@ -220,11 +220,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
             </div>
-            <div id="app" class="container px-0">
+            <div class="px-0">
                 <div class="row mb-5" v-if="s_container">
-                    <div class="col-md-12 mb-5" v-for="category in product_category">
+                    <div class="col-md-12 mb-2" v-for="category in product_category">
                         <div class="bg-light">&nbsp;</div>
-                        <div class="pr-3">
+                        <div class="container pr-3 py-4">
                             <div class="">
                                 <h5 class="card-title mx-3 mb-4 mt-2"><strong>{{category.name}}</strong></h5>
                                 <template v-for="(product, index) in all_products[category.id]">
@@ -267,7 +267,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </div>
                                 </template>
                                 <div class="text-center" v-if="more[category.id]">
-                                    <button class="btn btn-sm btn-primary"
+                                    <button class="btn btn-sm btn-outline-success rounded-3" style="font-size: 0.8em;"
                                         v-on:click="fetchProducts(category.id)">Tampilkan
                                         Lebih
                                         Banyak</button>
@@ -279,7 +279,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 </div>
                 <center>
-                    <a class="btn btn-primary" href="<?php echo site_url('shop/cart'); ?>" role="button">Pesan
+                    <a class="btn btn-primary" style="font-size: 1em;" href="<?php echo site_url('shop/cart'); ?>" role="button">Pesan
                         Sekarang</a>
                 </center>
             </div>
