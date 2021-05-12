@@ -142,8 +142,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     href="<?php echo base_url(); ?>"><?php echo get_store_name(); ?></a>
                 <div class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                        v-model="search_input">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+                        v-model="search_input" v-on:input="searchProducts()">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="button"
+                        @click="searchProducts()">Search</button>
                 </div>
                 <div class="collapse navbar-collapse" id="ftco-nav">
                     <ul class="navbar-nav ml-auto">
@@ -221,7 +222,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
             <div class="px-0">
-                <div class="row mb-5" v-if="s_container">
+                <div class="row mb-5" v-if="!s_container">
                     <div class="col-md-12 mb-2" v-for="category in product_category">
                         <div class="bg-light">&nbsp;</div>
                         <div class="container pr-3 py-4">
@@ -278,8 +279,54 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="bg-light">&nbsp;</div>
 
                 </div>
+                <div class="row mb-5" v-if="s_container">
+                    <div class="bg-light">&nbsp;</div>
+                    <div class="container pr-3 py-4">
+
+                        <h4>Hasil Pencarian: {{hasil_pencarian}}</h4>
+                        <template v-for="(product, index) in filterProducts">
+                            <div class="row my-4">
+                                <div class="col-12 col-md-6">
+                                    <div class="float-left mr-2">
+                                        <img width="100" class="img-fluid" v-bind:src="img_url+product.picture_name"
+                                            v-bind:alt="product.name" srcset="">
+                                    </div>
+                                    <div class="my-1">
+                                        <div>
+                                            <strong>{{product.name }}</strong>
+                                        </div>
+                                        <div>
+                                            <span class="mr-2"><span class="price-sale">Rp
+                                                    {{formatNumber(product.price)}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 my-auto">
+                                    <div class="float-right">
+                                        <div class="number-input">
+                                            <button v-on:click="orderDecrement(index, product.category_id)"
+                                                class="minus"></button>
+                                            <input class="quantity" min="0" name="quantity"
+                                                v-model="product.jumlah_order" type="number">
+                                            <button v-on:click="orderIncrement(index, product.category_id)"
+                                                class="plus"></button>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <div class="float-right">
+                                            <button class="btn btn-primary"
+                                                v-on:click="addCart(index, product.category_id)">
+                                                <i class="ion-ios-cart"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
                 <center>
-                    <a class="btn btn-primary" style="font-size: 1em;" href="<?php echo site_url('shop/cart'); ?>" role="button">Pesan
+                    <a class="btn btn-primary" style="font-size: 1em;" href="<?php echo site_url('shop/cart'); ?>"
+                        role="button">Pesan
                         Sekarang</a>
                 </center>
             </div>
@@ -294,13 +341,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         data() {
             return {
                 search_input: "",
-                s_container: true,
+                hasil_pencarian: "",
+                s_container: false,
                 img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
                 api_url: '<?= site_url('home/api'); ?>',
                 products: JSON.parse('<?= json_encode($products) ?>'),
                 limit: "<?= $limit ?>",
                 all_products: JSON.parse('<?= json_encode($all_products) ?>'),
                 product_category: JSON.parse('<?= json_encode($product_category) ?>'),
+                filterProducts: [],
                 category: JSON.parse('<?= json_encode($category) ?>'),
                 total_products: JSON.parse('<?= json_encode($total_products) ?>'),
                 more: [],
@@ -323,12 +372,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         },
         methods: {
             searchProducts: function() {
-                const search = this.search_input;
+                const search = this.hasil_pencarian = this.search_input;
+                if (search != "") {
+                    this.s_container = true;
+                } else {
+                    this.s_container = false;
+                }
                 axios.post("<?= site_url('home/search'); ?>", {
                         search,
                     })
                     .then((response) => {
-                        console.log("berhasil")
+                        this.filterProducts = response.data;
                     }, (error) => {
                         console.log(error);
                     });
@@ -367,17 +421,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
             },
             orderIncrement: function(index, category_id) {
-                this.products = this.all_products[category_id];
+                if (this.s_container) {
+                    this.products = this.filterProducts;
+                } else {
+                    this.products = this.all_products[category_id];
+                }
                 this.products[index].jumlah_order++;
             },
             orderDecrement: function(index, category_id) {
-                this.products = this.all_products[category_id];
+                if (this.s_container) {
+                    this.products = this.filterProducts;
+                } else {
+                    this.products = this.all_products[category_id];
+                }
                 if (this.products[index].jumlah_order > 0) {
                     this.products[index].jumlah_order--;
                 }
             },
             addCart: function(index, category_id) {
-                this.products = this.all_products[category_id];
+                if (this.s_container) {
+                    this.products = this.filterProducts;
+                } else {
+                    this.products = this.all_products[category_id];
+                }
                 const product = this.products[index];
                 let qty = product.jumlah_order;
                 if (qty == 0) {

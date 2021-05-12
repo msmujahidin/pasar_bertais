@@ -49,7 +49,11 @@ class Product_model extends CI_Model {
     {
         return ($this->db->where(array('id' => $id, 'sku' => $sku))->get('products')->num_rows() > 0) ? TRUE : FALSE;
     }
-
+    public function search($match){
+        $this->db->like('name', $match);
+        $query = $this->db->get('products');
+        return $query->result();
+    }
     public function product_data($id)
     {
         $data = $this->db->query("

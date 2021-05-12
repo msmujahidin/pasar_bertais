@@ -78,9 +78,17 @@ class Home extends CI_Controller {
 
     }
     public function search(){
+        
+        // $products = $this->product->search($match);
+        // echo json_encode($products);
+        // uji coba berhasil NANTI LANJUTKAN KEMBALI
         $data = json_decode(file_get_contents("php://input"), true);
-        $search = $data['search'];
-        // $this->product->get_products_by_category
+        $match = $data['search'];
+        $products = $this->product->search($match);
+        foreach( $products as $index => $product){
+            $products[$index]->jumlah_order = 0;
+        }
+        echo json_encode($products);
         
     }
     public function cart_api()
