@@ -73,6 +73,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="<?php echo site_url('admin/ongkir'); ?>">
+                <i class="fa fa-list text-success"></i>
+                <span class="nav-link-text">Ongkir</span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/orders'); ?>">
                 <i class="fa fa-file-invoice text-danger"></i>
                 <span class="nav-link-text">Pesanan</span>
