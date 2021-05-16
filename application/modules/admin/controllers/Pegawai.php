@@ -181,7 +181,7 @@ class Pegawai extends CI_Controller {
                 'username' => $username,
                 'password' => $password,
                 'profile_picture' => $profile_picture,
-                'role_id' => 2,
+                'role_id' => 1, //role_id 1 = admin
                 'register_date' => date('Y-m-d H:i:s')
             );
             
