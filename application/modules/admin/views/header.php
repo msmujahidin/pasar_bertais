@@ -97,6 +97,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </a>
             </li> -->
             <li class="nav-item">
+              <a class="nav-link" href="<?php echo site_url('admin/pegawai'); ?>">
+                <i class="fa fa-address-book text-primary"></i>
+                <span class="nav-link-text">Pegawai</span>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/customers'); ?>">
                 <i class="fa fa-users text-primary"></i>
                 <span class="nav-link-text">Reseler</span>

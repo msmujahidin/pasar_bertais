@@ -100,8 +100,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </p>
                                 <p class="d-flex">
                                     <span>Ongkos kirim</span>
-                                    <span v-if="!refral">{{ formatNumber(ongkir)}}</span>
-                                    <span v-else><strong>GRATIS</strong></span>
+                                    <span v-if="ongkir == null">-</span>
+                                    <span v-else-if="ongkir == 0"><strong>GRATIS</strong></span>
+                                    <span v-else>{{formatNumber(ongkir)}}</span>
                                 </p>
                                 <p class="d-flex">
                                     <span>Kode Refral</span>
@@ -110,7 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <p class="d-flex">
                                     <span>Kupon</span>
                                     <span><?php echo $discount_text; ?></span>
-                                    <input type="text" name="discount" id="" value="<?= $discount ?>">
+                                    <input type="hidden" name="discount" id="" value="<?= $discount ?>">
                                 </p>
                                 <hr>
                                 <p class="d-flex total-price">
@@ -187,13 +188,16 @@ const app = Vue.createApp({
         setKecamatan(index) {
             let kec = this.kecamatan[index];
             this.ongkir = kec.ongkir;
+            if(this.total >= kec.gratis_bila){
+                this.ongkir = 0;
+            }
             this.set_kecamatan = kec.kecamatan + ", " + kec.kabupaten_kota + ", " + kec.provinsi;
             this.setTotal();
             this.toogleAlamatBox();
         },
         formatNumber(number) {
             number = parseInt(number);
-            return !number ? "-" : "Rp " + number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00";
+            return "Rp " + number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00";
         },
     },
     computed: {

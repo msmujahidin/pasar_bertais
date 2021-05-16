@@ -20,5 +20,11 @@ class Register_model extends CI_Model {
 
         return $this->db->insert_id();
     }
+    public function register_pegawai($data)
+    {
+        $this->db->insert('pegawai', $data);
+
+        return $this->db->insert_id();
+    }
 
 }

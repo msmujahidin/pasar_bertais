@@ -73,7 +73,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </p>
                     <p class="d-flex">
                         <span>Biaya pengiriman</span>
-                        <span class="n-ongkir">Rp {{formatNumber(ongkir)}}</span>
+                        <span v-if="ongkir == 0"><strong>GRATIS</strong></span>
+                        <span v-else>Rp {{formatNumber(ongkir)}}</span>
                     </p>
                     <p class="d-flex">
                         <span>Potongan Harga</span>
