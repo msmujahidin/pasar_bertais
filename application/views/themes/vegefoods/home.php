@@ -279,49 +279,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="bg-light">&nbsp;</div>
 
                 </div>
-                <div class="row mb-5" v-if="s_container">
-                    <div class="bg-light">&nbsp;</div>
-                    <div class="container pr-3 py-4">
+                <div id="search_container">
+                    <div class="row mb-5" v-if="s_container">
+                        <div class="bg-light">&nbsp;</div>
+                        <div class="container pr-3 py-4">
 
-                        <h4>Hasil Pencarian: {{hasil_pencarian}}</h4>
-                        <template v-for="(product, index) in filterProducts">
-                            <div class="row my-4">
-                                <div class="col-12 col-md-6">
-                                    <div class="float-left mr-2">
-                                        <img width="100" class="img-fluid" v-bind:src="img_url+product.picture_name"
-                                            v-bind:alt="product.name" srcset="">
+                            <h4>Hasil Pencarian: {{hasil_pencarian}}</h4>
+                            <template v-for="(product, index) in filterProducts">
+                                <div class="row my-4">
+                                    <div class="col-12 col-md-6">
+                                        <div class="float-left mr-2">
+                                            <img width="100" class="img-fluid" v-bind:src="img_url+product.picture_name"
+                                                v-bind:alt="product.name" srcset="">
+                                        </div>
+                                        <div class="my-1">
+                                            <div>
+                                                <strong>{{product.name }}</strong>
+                                            </div>
+                                            <div>
+                                                <span class="mr-2"><span class="price-sale">Rp
+                                                        {{formatNumber(product.price)}}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="my-1">
-                                        <div>
-                                            <strong>{{product.name }}</strong>
-                                        </div>
-                                        <div>
-                                            <span class="mr-2"><span class="price-sale">Rp
-                                                    {{formatNumber(product.price)}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 my-auto">
-                                    <div class="float-right">
-                                        <div class="number-input">
-                                            <button v-on:click="orderDecrement(index, product.category_id)"
-                                                class="minus"></button>
-                                            <input class="quantity" min="0" name="quantity"
-                                                v-model="product.jumlah_order" type="number">
-                                            <button v-on:click="orderIncrement(index, product.category_id)"
-                                                class="plus"></button>
-                                        </div>
-                                        &nbsp;&nbsp;&nbsp;
+                                    <div class="col-12 col-md-6 my-auto">
                                         <div class="float-right">
-                                            <button class="btn btn-primary"
-                                                v-on:click="addCart(index, product.category_id)">
-                                                <i class="ion-ios-cart"></i>
-                                            </button>
+                                            <div class="number-input">
+                                                <button v-on:click="orderDecrement(index, product.category_id)"
+                                                    class="minus"></button>
+                                                <input class="quantity" min="0" name="quantity"
+                                                    v-model="product.jumlah_order" type="number">
+                                                <button v-on:click="orderIncrement(index, product.category_id)"
+                                                    class="plus"></button>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div class="float-right">
+                                                <button class="btn btn-primary"
+                                                    v-on:click="addCart(index, product.category_id)">
+                                                    <i class="ion-ios-cart"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </template>
+                            </template>
+                        </div>
                     </div>
                 </div>
                 <center>
@@ -340,7 +342,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     const app = Vue.createApp({
         data() {
             return {
-                search_input: "",
+                search_input: "<?php echo $search ?>",
                 hasil_pencarian: "",
                 s_container: false,
                 img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
@@ -357,6 +359,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         },
         mounted() {
             this.$nextTick(function() {
+                if (this.search_input !== "") {
+                    this.searchProducts();
+                }
                 if (this.products.length > 0) {
                     let more = [];
                     for (let i = 0; i < this.product_category.length; i++) {
@@ -476,4 +481,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
     })
     app.mount('#app')
+
+    // $(document).ready(function() {
+    //     document.getElementById('search_container').scrollIntoView({
+    //         behavior: 'smooth'
+    //     });
+    //     console.log("ready!");
+    // });
     </script>

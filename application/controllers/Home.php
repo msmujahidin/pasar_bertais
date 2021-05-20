@@ -13,7 +13,7 @@ class Home extends CI_Controller {
         ));
     }
 
-    public function index() {
+    public function index() {    
         $data['title'] = 'Selamat Datang di Pasar Bertais';
         $gambar = $this->gambar->getGambar();
         $data['foto1'] = $gambar[0]->foto;
@@ -23,7 +23,7 @@ class Home extends CI_Controller {
         $category = "";
         $products = [];
         $all_products = [];
-        $limit = 2;
+        $limit = 4;
         $start = 0;
         $category_id = 0;
         $total_products = [];
@@ -45,6 +45,8 @@ class Home extends CI_Controller {
             $products = $all_products[$category->id];
         }
         $carts = $this->cart->contents();
+        $search = $this->input->post('search');
+
         $data['carts'] = $carts;
         
         $data['product_category'] = $product_category;
@@ -53,6 +55,7 @@ class Home extends CI_Controller {
         $data['products'] = $products;
         $data['limit'] = $limit;
         $data['start'] = $start;
+        $data['search'] = $search;
         $data['all_products'] = $all_products;
         $data['best_deal'] = $this->product->best_deal_product();
         $data['reviews'] = $this->review->get_all_reviews();
