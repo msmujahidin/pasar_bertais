@@ -115,7 +115,46 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Page content -->
     <div class="container-fluid mt--6">
       <div class="row">
-        <div class="col-xl-6">
+        <div class="col-xl-8">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Ringkasan</h6>
+                  <h5 class="h3 text-white mb-0">Penjualan</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4">
+          <div class="card">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Ringkasan</h6>
+                  <h5 class="h3 mb-0">Pendapatan</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div class="chart">
+                <canvas id="chart-bars" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-4">
           <!-- Members list group card -->
           <div class="card">
             <!-- Card header -->
@@ -152,7 +191,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
           </div>
         </div>
-        <div class="col-xl-6">
+        <div class="col-xl-4">
           <!-- Checklist -->
           <div class="card">
             <!-- Card header -->
@@ -178,7 +217,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
           </div>
         </div>
-
+        <div class="col-xl-4">
+          <!-- Progress track -->
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header">
+              <!-- Title -->
+              <h5 class="h3 mb-0">Pembayaran menunggu konfirmasi</h5>
+            </div>
+            <!-- Card body -->
+            <div class="card-body">
+              <!-- List group -->
+              <ul class="list-group list-group-flush list my--3">
+              <?php foreach ($payments as $payment) : ?>
+                <li class="list-group-item px-0">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <!-- Avatar -->
+                      <a href="<?php echo site_url('admin/payments/users/'. $payment->user_id); ?>" class="avatar rounded-circle">
+                        <img alt="Image placeholder" src="<?php echo base_url('assets/uploads/users/'. $payment->profile_picture); ?>">
+                      </a>
+                    </div>
+                    <div class="col">
+                      <h5>Order #<?php echo $payment->order_number; ?></h5>
+                      <div>
+                       Rp <?php echo format_rupiah($payment->payment_price); ?>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              <?php endforeach; ?>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="row">
