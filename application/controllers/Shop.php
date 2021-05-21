@@ -85,7 +85,7 @@ class Shop extends CI_Controller {
         $kecamatan = $this->alamat->getAll();
 
         $jenis_kupon = $this->input->post('jenis_kupon');
-        echo $jenis_kupon;
+        // echo $jenis_kupon;
         $coupon = $this->input->post('coupon_code');
         $quantity = $this->input->post('quantity');
 
@@ -172,13 +172,13 @@ class Shop extends CI_Controller {
                 $params['discount_text'] = $disc;
                 $params['refral_text'] = $refral_text;
                 $params['refral'] = $refral;
-                echo $refral;
+                // echo $refral;
                 $params['kecamatan'] = $kecamatan;
 
                 $this->session->set_userdata('order_quantity', $items);
                 $this->session->set_userdata('total_price', $params['total']);
 
-                print_r($coupon_data);
+                // print_r($coupon_data);
                 get_header('Checkout');
                 get_template_part('shop/checkout', $params);
                 get_footer();
