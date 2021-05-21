@@ -74,7 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/ongkir'); ?>">
-                <i class="fa fa-list text-success"></i>
+                <i class="fa fa-list"></i>
                 <span class="nav-link-text">Ongkir</span>
               </a>
             </li>
@@ -98,7 +98,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </li> -->
             <li class="nav-item">
               <a class="nav-link" href="<?php echo site_url('admin/pegawai'); ?>">
-                <i class="fa fa-address-book text-primary"></i>
+                <i class="fa fa-address-book"></i>
                 <span class="nav-link-text">Pegawai</span>
               </a>
             </li>
@@ -106,6 +106,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <a class="nav-link" href="<?php echo site_url('admin/customers'); ?>">
                 <i class="fa fa-users text-primary"></i>
                 <span class="nav-link-text">Reseler</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?php echo site_url('admin/laporan'); ?>">
+                <i class="fa fa-book"></i>
+                <span class="nav-link-text">Laporan</span>
               </a>
             </li>
             <!-- <li class="nav-item">

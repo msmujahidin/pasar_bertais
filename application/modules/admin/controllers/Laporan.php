@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends CI_Controller {
+class Laporan extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
@@ -35,7 +35,7 @@ class Admin extends CI_Controller {
         $overview['income_overviews'] = $this->order->income_overview();
 
         $this->load->view('header', $params);
-        $this->load->view('overview copy', $overview);
+        $this->load->view('laporan/laporan', $overview);
         $this->load->view('footer');
     }
 }
