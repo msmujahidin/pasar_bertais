@@ -127,88 +127,98 @@ class Orders extends CI_Controller {
         redirect('admin/orders/view/'. $order_id.'#pesanan');
     }
 
-    public function export($order_id){
+    public function exportAll(){
         $this->load->helper('download');
-        if ( $this->order->is_order_exist($order_id)){
+        $order_list = $this->input->post('order');
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // initial coll, row Table
+        $initial_data = [
+            'row' => 1,
+            'col_first' => 'A',
+            'col_last' => 'L',
+
+        ];
+        $row_first = $initial_data['row'];
+        $col_first = $initial_data['col_first'];
+        $col_last = $initial_data['col_last'];
+
+        // setting col dimension
+        for($letter=$col_first; $letter<=$col_last; $letter++){
+            $sheet->getColumnDimension($letter)->setWidth(14);
+        }
+        $row = $row_first;
+
+        // create Title Table
+        $sheet->mergeCells($col_first.$row.':'.$col_last.$row);
+        $sheet->getStyle($col_first.$row)->getFont()->setBold(true);
+        $sheet->getStyle($col_first.$row)->getAlignment()->setHorizontal('center');
+        $sheet->getStyle($col_first.$row)->getFont()->setBold(true);
+        $sheet->setCellValue($col_first.$row++, 'Barang Pesanan');
+
+        // create Header Tabel
+        $labels = [
+            'Order ID','Harga Real', 'Harga Beli/kg (Rp)', 'Jumlah', 'Item', 'Kategori', 'Pembeli', 'Penjual', 'No. Hp', 'Lokasi', 'Sub Total', 'Total'
+        ];
+        $letter = $col_first;
+        foreach($labels as $label){
+            $sheet->setCellValue($letter++.$row, $label);
+        }
+        // create list order by order id
+        // update initial data
+        $initial_data['row']++;
+        foreach($order_list as $order_id):
             $data = $this->order->order_data($order_id);
             $items = $this->order->order_items($order_id);
-            $delivery_data = json_decode($data->delivery_data);
-            // print_r($delivery_data->customer);
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            
-            $sheet->getColumnDimension('A')->setWidth(15);
-            $sheet->getColumnDimension('B')->setWidth(18);
-            $sheet->getColumnDimension('C')->setWidth(18);
-            $sheet->getColumnDimension('D')->setWidth(18);
-            $sheet->getColumnDimension('E')->setWidth(8);
-            $sheet->getColumnDimension('F')->setWidth(14);
-            $sheet->getColumnDimension('G')->setWidth(14);
-            $sheet->getColumnDimension('H')->setWidth(14);
-            $sheet->getColumnDimension('I')->setWidth(14);
-            $sheet->getColumnDimension('J')->setWidth(14);
+            $initial_data['data'] = $data;
+            $initial_data['items'] = $items;
+            $this->create_list_order_item($sheet, $initial_data);
+            $initial_data['row'] += sizeof($items);
+        endforeach;
 
-
-            // $sheet->getStyle('A3:F6')->getAlignment()->setVertical('center');
-
-            $i=$i0=1;
-            $sheet->mergeCells('A'.$i.':'.'J'.$i);
-            $sheet->getStyle('A'.$i)->getFont()->setBold(true);
-            $sheet->getStyle('A'.$i)->getAlignment()->setHorizontal('center');
-
-            $sheet->getStyle('A'.$i)->getFont()->setBold(true);
-            $sheet->setCellValue('A'.$i, 'Barang Pesanan');
-            $i++;
-            $sheet->setCellValue('A'.$i, 'Harga Real');
-            $sheet->setCellValue('B'.$i, 'Harga Beli/kg (Rp)');
-            $sheet->setCellValue('C'.$i, 'Jumlah');
-            $sheet->setCellValue('D'.$i, 'Item');
-            $sheet->setCellValue('E'.$i, 'Kategori');
-            $sheet->setCellValue('F'.$i, 'Pembeli');
-            $sheet->setCellValue('G'.$i, 'Penjual');
-            $sheet->setCellValue('H'.$i, 'No. Hp');
-            $sheet->setCellValue('I'.$i, 'Lokasi');
-            $sheet->setCellValue('J'.$i, 'Sub Total');
-
-            // $sheet->getStyle('A'.$i.':F'.$i)->getAlignment()->setHorizontal('center');
-            $i++;
-            foreach($items as $item):
-                $sub_total = $item->order_qty * $item->order_price;
-                $sheet->setCellValue('A'.$i, '');
-                $sheet->setCellValue('b'.$i, format_rupiah($item->order_price));
-                $sheet->setCellValue('C'.$i, $item->order_qty);
-                $sheet->setCellValue('D'.$i, $item->name);
-                $sheet->setCellValue('E'.$i, $item->category);
-                $sheet->setCellValue('F'.$i, '');
-                $sheet->setCellValue('G'.$i, $item->penjual);
-                $sheet->setCellValue('H'.$i, $item->no_hp);
-                $sheet->setCellValue('I'.$i, $item->lokasi);
-                $sheet->setCellValue('J'.$i, format_rupiah($item->order_price*$item->order_qty));
-                $i++;
-            endforeach;
-            $sheet->mergeCells('A'.$i.':I'.$i);
-            $sheet->getStyle('A'.$i.':I'.$i)->getAlignment()->setHorizontal('center');
-
-            $sheet->setCellValue('A'.$i, 'TOTAL (RP)');
-            $sheet->setCellValue('J'.$i, format_rupiah($data->total_price));
-
-            $sheet
-            ->getStyle('A'.$i0.':J'.$i)
+        // style allcell to borders and center
+        $row = $initial_data['row'];
+        $sheet
+            ->getStyle($col_first.$row_first.':'.$col_last.$row)
             ->getBorders()->getAllBorders()
             ->setBorderStyle(Border::BORDER_THIN);
-            $sheet->getStyle('A'.$i0.':J'.$i)->getAlignment()->setHorizontal('center');
+        $sheet->getStyle($col_first.$row_first.':'.$col_last.$row)->getAlignment()->setHorizontal('center');
 
-            $file_name = 'report.xlsx';
-            // header('Content-Type: application/vnd.ms-excel');
-            // header('Content-Disposition: attachment;filename="'.$file_name.'"');
-            
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="'.$file_name.'"');
-            header('Cache-Control: max-age=0');
-            $writer = new Xlsx($spreadsheet);
-            $writer->save('php://output');
-        }
-        // redirect('admin/orders/view/'. $order_id.'#pesanan');
+        // Exporting Excel file
+        $file_name = 'report.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$file_name.'"');
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+
+    }
+    private function create_list_order_item($sheet, $initial_data){
+        // initial data
+        $data = $initial_data['data'];
+        $items = $initial_data['items'];
+        $col_first =  $initial_data['col_first'];
+        $col_last =  $initial_data['col_last'];
+        $row = $row_first = $initial_data['row'];
+
+        foreach($items as $index => $item):
+            ++$row;
+            $total = $data->total_price;
+            $sub_total = $item->order_qty * $item->order_price;
+            $values = [
+                '', '', format_rupiah($item->order_price), $item->order_qty, $item->name, $item->category, '', $item->penjual, $item->no_hp, $item->lokasi, format_rupiah($sub_total), ''
+            ];
+            if($index === 0){
+                $values = [
+                    $data->order_number, '', format_rupiah($item->order_price), $item->order_qty, $item->name, $item->category, '', $item->penjual, $item->no_hp, $item->lokasi, format_rupiah($sub_total), format_rupiah($total)
+                ];
+            }
+            $letter = $col_first;
+            foreach($values as $value){
+                $sheet->setCellValue($letter++.$row, $value);
+            }
+        endforeach;
     }
 
     public function update_order_item($id){
