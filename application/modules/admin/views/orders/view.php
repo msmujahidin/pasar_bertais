@@ -1,8 +1,51 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+<div id="section-to-print">
+    <div>
+        <img class="logo" src="<?= base_url('assets/logo.png') ?>" alt="">
+    </div>
+    <div class="web-title">
+        www.pasarbertais.com
+    </div>
+    <div class="order-no">
+        #FVI15521611153
+    </div>
+    <hr class="dashed mb-2">
+    <table class="mb-2">
+        <tr class="pb-2">
+            <td width="30">1</td>
+            <td width="180">Apel</td>
+            <td class="text-right" width="52">15,000</td>
+        </tr>
+        <tr class="pb-2">
+            <td width="30">3</td>
+            <td width="180">Ayam</td>
+            <td class="text-right" width="52">15,000</td>
+        </tr>
+        <tr class="pb-2">
+            <td width="30">4</td>
+            <td width="180">Tahu</td>
+            <td class="text-right" width="52">15,000</td>
+        </tr>
+        <tr class="pb-2">
+            <td width="30">10</td>
+            <td width="180">Tempe</td>
+            <td class="text-right" width="52">15,000</td>
+        </tr>
+    </table>
+    <hr class="dashed mb-1">
+    <div class="my-footer">
+        <div class="text-center">
+            Terima kasih telah berbelanja di <br>
+            <strong>PasarBertais.com</strong> <br>
+            Dengan belanja di PasarBertais.com,
+            ibu telah membantu perekonomian pedagang <strong>pasar Bertais</strong>
+        </div>
+    </div>
+</div>
 <!-- Header -->
-<div class="header bg-primary pb-6">
+<div class="header bg-primary pb-6 not-print">
     <div class="container-fluid">
         <div class="header-body">
             <div class="row align-items-center py-4">
@@ -26,7 +69,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
+<div class="container-fluid mt--6 not-print">
 
     <div class="row">
         <div class="col-md-8">
@@ -113,9 +156,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <h3 class="mb-0">Barang dalam pesanan</h3>
 
                         <a href="<?php echo site_url('admin/orders/create/'.$order_id); ?>"
-                            class="btn btn-primary btn-sm">Tambah Item</a>
-                        <a href="<?php echo site_url('admin/orders/export/'.$order_id); ?>"
-                            class="btn btn-success btn-sm">Export Excel</a>
+                            class="btn btn-outline-primary"><i class="fa fa-plus"></i> Produk</a>
+
+                        <button onclick="window.open('<?php echo site_url('admin/orders/invoice/'.$order_id); ?>')"
+                            class="btn btn-outline-primary"><i class="fa fa-print"></i>
+                            Invoice</button>
                     </div>
                     <div class="card-body p-0">
                         <table class="table align-items-center table-flush">
