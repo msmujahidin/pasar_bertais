@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <style>
 .my-footer {
-    width: 280px;
+    width: 260px;
     height: 30px;
 }
 

@@ -235,8 +235,7 @@ class Orders extends CI_Controller {
         $data = $initial_data['data'];
         $items = $initial_data['items'];
         $col_first =  $initial_data['col_first'];
-        $col_last =  $initial_data['col_last'];
-        $row = $row_first = $initial_data['row'];
+        $row = $initial_data['row'];
 
         foreach($items as $index => $item):
             ++$row;
