@@ -331,7 +331,7 @@ $('.remove-item-mobile').click(function(e) {
         },
         success: function(res) {
             if (res.code == 204) {
-                tr.addClass('alert-danger');
+                tr.addClass('alert-danger p-4');
 
                 setTimeout(function(e) {
                     tr.hide('fade');
