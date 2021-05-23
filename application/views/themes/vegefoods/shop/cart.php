@@ -60,17 +60,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div :class="'row my-4 cart-'+item.rowid">
                                 <div class="col-1">
                                     <div class="product-remove py-4">
-                                        <a href="#" class="remove-item" v-bind:data-rowid="item.rowid"><span
+                                        <a href="#" class="remove-item-mobile" v-bind:data-rowid="item.rowid"><span
                                                 class="ion-ios-close" style="font-size: 30px;"></span></a>
                                     </div>
                                 </div>
-                                <div class="col-5 product-name">
+                                <div class="col-5">
                                     <div class="text-center">
-                                        <div>
+                                        <div class="product-name">
                                             <img width="60" class="img-fluid" :src="img_url+item.picture_name"
                                                 :alt="item.name" srcset="">
                                         </div>
-                                        <div class="my-1 text-center ">
+                                        <div class="my-1 text-center">
                                             <div>
                                                 <strong>{{item.name}}</strong>
                                             </div>
@@ -78,6 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 Rp {{formatNumber(item.price)}}
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -302,6 +303,35 @@ $('.remove-item').click(function(e) {
         success: function(res) {
             if (res.code == 204) {
                 tr.addClass('alert alert-danger');
+
+                setTimeout(function(e) {
+                    tr.hide('fade');
+
+                    $('.n-subtotal').text(res.total.subtotal);
+                    $('.n-ongkir').text(res.total.ongkir);
+                    $('.n-total').text(res.total.total);
+                }, 2000);
+            }
+        }
+    })
+})
+$('.remove-item-mobile').click(function(e) {
+    e.preventDefault();
+
+    var rowid = $(this).data('rowid');
+    var tr = $('.cart-' + rowid);
+
+    $('.product-name', tr).html('<i class="fa fa-spin fa-spinner"></i> Menghapus...');
+
+    $.ajax({
+        method: 'POST',
+        url: '<?php echo site_url('shop/cart_api?action=remove_item'); ?>',
+        data: {
+            rowid: rowid
+        },
+        success: function(res) {
+            if (res.code == 204) {
+                tr.addClass('alert-danger');
 
                 setTimeout(function(e) {
                     tr.hide('fade');
