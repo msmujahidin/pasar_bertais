@@ -13,14 +13,96 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
 </div>
+<style>
+.mobile-carts * {
+    font-size: 12px;
+}
 
+.mobile-head,
+.mobile-footer {
+    background-color: #82ae47;
+    color: #fff;
+}
+
+.mobile-head * {
+    font-size: 14px;
+    color: #fff;
+}
+</style>
 <section class="ftco-section ftco-Keranjang Belanja" id="app">
     <div class="container">
         <?php if ( count($carts) > 0) : ?>
         <form action="<?php echo site_url('shop/checkout'); ?>" method="POST">
             <div class="row">
                 <div class="col-md-12 ftco-animate">
-                    <div class="cart-list">
+                    <!-- mobile phone -->
+                    <div class="mobile-carts d-md-none">
+                        <div class="row my-4 py-4 mobile-head">
+                            <div class="col-1">
+                            </div>
+                            <div class="col-5">
+                                <div class="text-center">
+                                    <strong>Produk</strong>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center">
+                                    <strong>Kuantitas</strong>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center">
+                                    <strong>Subtotal</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <template v-for="(item, index) in carts">
+                            <div :class="'row my-4 cart-'+item.rowid">
+                                <div class="col-1">
+                                    <div class="product-remove py-4">
+                                        <a href="#" class="remove-item" v-bind:data-rowid="item.rowid"><span
+                                                class="ion-ios-close" style="font-size: 30px;"></span></a>
+                                    </div>
+                                </div>
+                                <div class="col-5 product-name">
+                                    <div class="text-center">
+                                        <div>
+                                            <img width="60" class="img-fluid" :src="img_url+item.picture_name"
+                                                :alt="item.name" srcset="">
+                                        </div>
+                                        <div class="my-1 text-center ">
+                                            <div>
+                                                <strong>{{item.name}}</strong>
+                                            </div>
+                                            <div>
+                                                Rp {{formatNumber(item.price)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="text-center">
+                                        <div class="input-group mb-3">
+                                            <input @change="cekHarga(item.rowid)" type="number"
+                                                v-bind:data-id="item.rowid" v-bind:name="'quantity['+item.rowid+']'"
+                                                class="quantity form-control input-number" v-model="item.qty"
+                                                @updated="val=>item.qty=val" min="1" max="100">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="text-center">
+                                        <div class="py-4">
+                                            <span>Rp {{formatNumber(item.subtotal)}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="py-1 mobile-footer">
+                        </div>
+                    </div>
+                    <div class="cart-list d-none d-md-block">
                         <table class="table">
                             <thead class="thead-primary">
                                 <tr class="text-center">
@@ -80,7 +162,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                         <br><br>
                         <!-- <h3>Kode Kupon</h3> -->
-                        <p>Punya <strong>{{voucher}}</strong>? Gunakan {{voucher}} kamu untuk mendapatkan potongan harga menarik</p>
+                        <p>Punya <strong>{{voucher}}</strong>? Gunakan {{voucher}} kamu untuk mendapatkan potongan harga
+                            menarik</p>
 
                         <div class="form-group">
                             <label for="code">Kode:</label>
@@ -159,6 +242,7 @@ const app = Vue.createApp({
         //   this.total_cart
         // },
         formatNumber(number) {
+            number = parseInt(number);
             return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00";
         },
         cekHarga: function(id) {
