@@ -146,10 +146,10 @@ const app = Vue.createApp({
         return {
             img_url: '<?php echo base_url('assets/uploads/products/'); ?>',
             kecamatan: JSON.parse('<?= json_encode($kecamatan) ?>'),
-            subtotal: '<?= $subtotal ?>',
+            subtotal: parseInt('<?= $subtotal ?>'),
             discount: '<?= $discount ?>',
             refral: '<?= $refral ?>',
-            total: '<?= $total ?>',
+            total: parseInt('<?= $total ?>'),
             kec: {},
             set_kecamatan: '',
             ongkir: null,
@@ -186,7 +186,7 @@ const app = Vue.createApp({
             }
         },
         setKecamatan(index) {
-            let kec = this.kecamatan[index];
+            let kec = this.filterKec[index];
             this.ongkir = kec.ongkir;
             if(this.total >= kec.gratis_bila){
                 this.ongkir = 0;
