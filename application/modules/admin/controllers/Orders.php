@@ -142,13 +142,12 @@ class Orders extends CI_Controller {
             $products['data'] = $data;
             $products['order_id'] = $id;
             
-            $products['products'] = $this->product->get_all_products(16, 0);
+            $products['products'] = $this->product->get_all_products(0, 0);
 
             // print_r($products['products']);
 
-            $this->load->view('header', $params);
+            // $this->load->view('header', $params);
             $this->load->view('orders/list_product', $products);
-            $this->load->view('footer');
 
         }
         else

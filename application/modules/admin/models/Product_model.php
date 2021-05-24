@@ -14,7 +14,7 @@ class Product_model extends CI_Model {
 
     public function get_all_products($limit, $start)
     {
-        $products = $this->db->get('products', $limit, $start)->result();
+        $products = $this->db->order_by('name')->get('products', $limit, $start)->result();
 
         return $products;
     }
