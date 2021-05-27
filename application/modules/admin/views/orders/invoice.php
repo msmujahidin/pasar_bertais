@@ -100,13 +100,25 @@ hr.dashed {
         </div>
         <hr class="dashed mb-2">
         <table class="mb-2">
+            <?php $total =0; ?>
             <?php foreach($items as $item): ?>
-                <tr class="pb-2">
-                    <td width="30"><?= $item->order_qty ?></td>
-                    <td width="180"><?= $item->name ?></td>
-                    <td class="text-right" width="52"><?= format_rupiah($item->order_price) ?></td>
-                </tr>
+            <?php 
+                $subtotal = $item->order_qty*$item->order_price; 
+                $total += $subtotal;
+            ?>
+            <tr class="pb-2">
+                <td width="30"><?= $item->order_qty ?></td>
+                <td width="180"><?= $item->name ?></td>
+                <td class="text-right" width="52"><?= format_rupiah($subtotal) ?></td>
+            </tr>
             <?php endforeach; ?>
+            <tr>
+                <td colspan="3"><hr class="dashed mb-2"></td>
+            </tr>
+            <tr>
+                <td colspan="2">Total</td>
+                <td width="52" class="text-right"><?= format_rupiah($total) ?></td>
+            </tr>
         </table>
         <hr class="dashed mb-1">
         <div class="my-footer">
