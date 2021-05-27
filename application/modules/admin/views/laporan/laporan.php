@@ -109,7 +109,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <h3 class="mb-0">Laporan Pemasukan</h3>
                         </div>
                         <div class="col text-right">
-                            <a href="<?php echo site_url('admin/products'); ?>"
+                            <a href="#"
                                 class="btn btn-sm btn-primary">Tambah</a>
                         </div>
                     </div>
@@ -149,7 +149,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <h3 class="mb-0">Laporan Pengeluaran</h3>
                         </div>
                         <div class="col text-right">
-                            <a href="<?php echo site_url('admin/products'); ?>"
+                            <a href="#"
                                 class="btn btn-sm btn-primary">Tambah</a>
                         </div>
                     </div>
