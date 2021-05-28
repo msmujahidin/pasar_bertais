@@ -120,7 +120,7 @@ class Orders extends CI_Controller {
             // echo '<pre>';
             // var_dump($data);
             // echo '</pre>';
-            $initial_height = 46;
+            $initial_height = 50;
             $heigth_item = 3;
             $heigth_list =  $heigth_item * sizeof($items);
             $height = $initial_height + $heigth_list;

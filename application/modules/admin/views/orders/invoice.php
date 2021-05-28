@@ -100,7 +100,7 @@ hr.dashed {
         </div>
         <hr class="dashed mb-2">
         <table class="mb-2">
-            <?php $total =0; ?>
+            <?php $total = $data->ongkir; ?>
             <?php foreach($items as $item): ?>
             <?php 
                 $subtotal = $item->order_qty*$item->order_price; 
@@ -112,6 +112,11 @@ hr.dashed {
                 <td class="text-right" width="52"><?= format_rupiah($subtotal) ?></td>
             </tr>
             <?php endforeach; ?>
+            <tr class="pb-2">
+                <td width="30">1</td>
+                <td width="180">Ongkir</td>
+                <td class="text-right" width="52"><?= format_rupiah($data->ongkir) ?></td>
+            </tr>
             <tr>
                 <td colspan="3"><hr class="dashed mb-2"></td>
             </tr>
