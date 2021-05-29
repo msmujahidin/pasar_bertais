@@ -258,8 +258,39 @@ class Shop extends CI_Controller {
                 $this->session->unset_userdata('coupon_id');
 
                 $this->session->set_flashdata('order_flash', 'Order berhasil ditambahkan');
+                $text_items = "";
+                foreach ($this->cart->contents() as $item)
+                {
+                    $text_items .=$item['name']." (".$item['qty']."x)
+";
+                }
+                print_r($text_items);
+$text = 'Halo PasarBertais.com,
 
-                redirect('guest/order/'.$order_number);
+Saya mau pesan*:
+'.$text_items.'
+
+*Total belanja*: Rp '.format_rupiah($total_price).' 
+*Total ongkir*: Rp '.format_rupiah($ongkir).'
+
+*Detail pesanan*:
+'.site_url('guest/order/'.$order_number).'
+
+----
+
+*Nama* :
+'.$name.'
+
+*Alamat* :
+'.$address.',
+'.$kecamatan.'
+
+Pengiriman: jam 09.00 - 11.00 (kami usahakan lebih cepat)';
+
+                $text_url= urlencode($text);
+                $link_wa = 'https://wa.me/6281945741749?text=';
+                redirect($link_wa.$text_url);
+                // redirect('guest/order/'.$order_number);
             break;
         }
 
