@@ -251,20 +251,19 @@ class Shop extends CI_Controller {
                 }
 
                 $this->product->create_order_items($items);
-
+                $text_items = "";
+foreach ($this->cart->contents() as $item)
+{
+    $text_items .=$item['name']." (".$item['qty']."x)
+";
+}
                 $this->cart->destroy();
                 $this->session->unset_userdata('order_quantity');
                 $this->session->unset_userdata('total_price');
                 $this->session->unset_userdata('coupon_id');
 
                 $this->session->set_flashdata('order_flash', 'Order berhasil ditambahkan');
-                $text_items = "";
-                foreach ($this->cart->contents() as $item)
-                {
-                    $text_items .=$item['name']." (".$item['qty']."x)
-";
-                }
-                print_r($text_items);
+
 $text = 'Halo PasarBertais.com,
 
 Saya mau pesan*:
