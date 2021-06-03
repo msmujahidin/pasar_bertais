@@ -5,8 +5,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
         <div class="header-body">
+
             <div class="row align-items-center py-4">
-                <div class="col-lg-6 col-7">
+                <div class="col-lg-6 col-12">
                     <h6 class="h2 text-white d-inline-block mb-0">Laporan Laba Rugi</h6>
                 </div>
                 <div class="col-lg-6 col-5 text-right">
@@ -18,6 +19,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </nav>
                 </div>
             </div>
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-4">
+                    <form action="" method="POST">
+                        <div class="form-row">
+                            <div class="col-12 py-1">
+                                <label class="text-white">Dari tanggal:</label>
+                                <input name="first_date" value="<?= $first_date; ?>" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-12 py-1">
+                                <label class="text-white">Sampai tanggal:</label>
+                                <input name="second_date" value="<?= $second_date; ?>" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-12 py-1">
+                                <button class="btn btn-secondary btn-block d-md-none">submit</button>
+                                <button class="btn btn-secondary d-none d-md-block">submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-4 col-md-6">
@@ -27,9 +48,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">pemasukan</h5>
-                                    <!-- <span class="h2 font-weight-bold mb-0">Rp
-                                        <?php echo format_rupiah($total_income); ?></span> -->
-                                    <span class="h2 font-weight-bold mb-0">Rp 1.000.000,00</span>
+                                    <span class="h2 font-weight-bold mb-0">Rp
+                                        <?php echo format_rupiah($total_income); ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-success text-white rounded-circle shadow">
@@ -51,9 +71,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">pengeluaran</h5>
-                                    <!-- <span class="h2 font-weight-bold mb-0">Rp
-                                        <?php echo format_rupiah($total_income); ?></span> -->
-                                    <span class="h2 font-weight-bold mb-0">Rp 112.000,00</span>
+                                    <span class="h2 font-weight-bold mb-0">Rp
+                                        <?php echo format_rupiah($total_outcome); ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-warning text-white rounded-circle shadow">
@@ -75,10 +94,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">keuntungan</h5>
-                                    <!-- <span class="h2 font-weight-bold mb-0">Rp
-                                        <?php echo format_rupiah($total_income); ?></span> -->
                                     <span class="h2 font-weight-bold mb-0">Rp
-                                        <?php echo format_rupiah(1000000-112000); ?></span>
+                                        <?php echo format_rupiah($total_profit); ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -109,8 +126,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <h3 class="mb-0">Laporan Pemasukan</h3>
                         </div>
                         <div class="col text-right">
-                            <a href="#"
-                                class="btn btn-sm btn-primary">Tambah</a>
+                            <a href="#" class="btn btn-sm btn-primary">Tambah</a>
                         </div>
                     </div>
                 </div>
@@ -133,9 +149,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     Penjualan
                                 </td>
                                 <td>
-                                    Rp 1.000.000,00
+                                    Rp <?php echo format_rupiah($income); ?>
                                 </td>
                             </tr>
+                            <?php foreach($other_incomes as $no => $income): ?>
+                            <tr>
+                                <th scope="col">
+                                    <?= $no+1 ; ?>
+                                </th>
+                                <td>
+                                    <?= $income->name; ?>
+                                </td>
+                                <td>
+                                    Rp. <?= format_rupiah($income->value); ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -149,8 +178,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <h3 class="mb-0">Laporan Pengeluaran</h3>
                         </div>
                         <div class="col text-right">
-                            <a href="#"
-                                class="btn btn-sm btn-primary">Tambah</a>
+                            <a href="#" class="btn btn-sm btn-primary">Tambah</a>
                         </div>
                     </div>
                 </div>
@@ -165,39 +193,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach($outcomes as $no => $outcome): ?>
                             <tr>
                                 <th scope="col">
-                                    1
+                                    <?= $no+1 ; ?>
                                 </th>
                                 <td>
-                                    Gaji Karyawan
+                                    <?= $outcome->name; ?>
                                 </td>
                                 <td>
-                                    Rp 100.000,00
+                                    Rp. <?= format_rupiah($outcome->value); ?>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="col">
-                                    2
-                                </th>
-                                <td>
-                                    Sewa Tempat
-                                </td>
-                                <td>
-                                    Rp 2.000,00
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="col">
-                                    3
-                                </th>
-                                <td>
-                                    Air
-                                </td>
-                                <td>
-                                    Rp 10.000,00
-                                </td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

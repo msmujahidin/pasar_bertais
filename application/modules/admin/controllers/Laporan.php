@@ -12,7 +12,8 @@ class Laporan extends CI_Controller {
             'product_model' => 'product',
             'customer_model' => 'customer',
             'order_model' => 'order',
-            'payment_model' => 'payment'
+            'payment_model' => 'payment',
+            'laporan_model' => 'laporan'
         ));
     }
 
@@ -20,22 +21,53 @@ class Laporan extends CI_Controller {
     {
         $params['title'] = 'Admin '. get_store_name();
 
-        $overview['total_products'] = $this->product->count_all_products();
-        $overview['total_customers'] = $this->customer->count_all_customers();
-        $overview['total_order'] = $this->order->count_all_orders();
-        $overview['total_income'] = $this->payment->sum_success_payment();
+        $first_date = $this->input->post('first_date');
+        $second_date = $this->input->post('second_date');
+        $overview['first_date'] = $first_date;
+        $overview['second_date'] = $second_date;
 
-        $overview['products'] = $this->product->latest();
-        $overview['categories'] = $this->product->latest_categories();
-        $overview['payments'] = $this->payment->payment_overview();
-        $overview['orders'] = $this->order->latest_orders();
-        $overview['customers'] = $this->customer->latest_customers();
+        // Ambil nilai last income
+        $income = 0;
+        if($first_date){
+            $report_incomes = $this->laporan->get_income_between($first_date, $second_date);
+            foreach($report_incomes as $report){              
+                $income += $report->income;
+            }
+        }else{
+            $report_income = $this->laporan->get_last_income();
+            $income = $report_income->income;
+        }
+        $overview['income'] = $income;
+        echo $income;
 
-        $overview['order_overviews'] = $this->order->order_overview();
-        $overview['income_overviews'] = $this->order->income_overview();
+        // // 
+        $other_incomes = $this->laporan->get_other_income();
+        $total_other_income = 0;
+        foreach($other_incomes as $other){
+            $total_other_income += $other->value;
+        }
+        $outcomes = $this->laporan->get_outcome();
+        $total_outcome = 0;
+        foreach($outcomes as $outcome){
+            $total_outcome += $outcome->value;
+        }
+        
+
+        $overview['other_incomes'] = $other_incomes;
+        $overview['outcomes'] = $outcomes;
+
+        // hitung total income, outcome, profit
+        $total_income = $income + $total_other_income;
+        $total_profit = $total_income - $total_outcome;
+        $overview['total_income'] = $total_income;
+        $overview['total_outcome'] = $total_outcome;
+        $overview['total_profit'] = $total_profit;
 
         $this->load->view('header', $params);
         $this->load->view('laporan/laporan', $overview);
         $this->load->view('footer');
+    }
+
+    public function add_other_income(){
     }
 }

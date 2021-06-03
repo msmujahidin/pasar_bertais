@@ -19,7 +19,8 @@ class Orders extends CI_Controller {
 
         $this->load->model(array(
             'product_model' => 'product',
-            'order_model' => 'order'
+            'order_model' => 'order',
+            'laporan_model' => 'laporan'
         ));
     }
 
@@ -288,10 +289,30 @@ class Orders extends CI_Controller {
     {
         $status = $this->input->post('status');
         $order = $this->input->post('order');
+        $total_price = $this->input->post('total_price');
 
         $this->order->set_status($status, $order);
         $this->session->set_flashdata('order_flash', 'Status berhasil diperbarui');
 
+        // MENGHITUNG INCOME / PEMASUKAN disini 
+        if($status == 4){
+            $date = date('Y-m-d');
+            $today_income = $this->laporan->get_income_by_date($date);
+            if($today_income){
+                $id = $today_income->id;
+                $income = $today_income->income;
+                $data = array(
+                    'income' => $income + $total_price,
+                );
+                $this->laporan->update_income($id, $data);
+            }else{
+                $data = array(
+                    'income' => $total_price,
+                    'date' => $date,
+                );
+                $this->laporan->add_income($data);
+            }
+        }        
         redirect('admin/orders/view/'. $order);
     }
 }

@@ -117,6 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="card-footer">
                         <form action="<?php echo site_url('admin/orders/status'); ?>" method="POST">
                             <input type="hidden" name="order" value="<?php echo $data->id; ?>">
+                            <input type="hidden" name="total_price" value="<?= $data->total_price; ?>">
                             <div class="row">
                                 <div class="col-md-10">
                                     <div class="form-group">
