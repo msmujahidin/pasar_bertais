@@ -38,6 +38,14 @@ class Laporan_model extends CI_Model {
         $this->db->insert('pemasukan', $data);
         return $this->db->insert_id();
     }
+    public function update_other_income($id, $data)
+    {
+        return $this->db->where('id', $id)->update('pemasukan', $data);
+    }
+    public function delete_other_income($id)
+    {
+        return $this->db->where('id', $id)->delete('pemasukan');
+    }
     public function get_other_income()
     {
         return $this->db->get('pemasukan')->result();
@@ -48,6 +56,14 @@ class Laporan_model extends CI_Model {
     {
         $this->db->insert('pengeluaran', $data);
         return $this->db->insert_id();
+    }
+    public function update_outcome($id, $data)
+    {
+        return $this->db->where('id', $id)->update('pengeluaran', $data);
+    }
+    public function delete_outcome($id)
+    {
+        return $this->db->where('id', $id)->delete('pengeluaran');
     }
     public function get_outcome()
     {

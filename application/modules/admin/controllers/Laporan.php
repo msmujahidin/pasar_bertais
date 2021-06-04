@@ -38,7 +38,6 @@ class Laporan extends CI_Controller {
             $income = $report_income->income;
         }
         $overview['income'] = $income;
-        echo $income;
 
         // // 
         $other_incomes = $this->laporan->get_other_income();
@@ -68,6 +67,70 @@ class Laporan extends CI_Controller {
         $this->load->view('footer');
     }
 
-    public function add_other_income(){
+    public function income_api()
+    {
+        $action = $this->input->get('action');
+        $id = $this->input->get('id');
+
+        switch ($action) {
+            case 'add_income' :
+                $name = $this->input->post('name');
+                $value = $this->input->post('value');
+                $data = array(
+                    'name' => $name, 
+                    'value' =>$value
+                );
+                $this->laporan->add_other_income($data);
+                redirect('admin/laporan/');
+            break;
+            case 'update_income' :
+                $id = $this->input->post('id');
+                $name = $this->input->post('name');
+                $value = $this->input->post('value');
+                $data = array(
+                    'name' => $name, 
+                    'value' =>$value
+                );
+                $this->laporan->update_other_income($id,$data);
+                redirect('admin/laporan/');
+            break;
+            case 'delete_income' :
+                $this->laporan->delete_other_income($id);
+                redirect('admin/laporan/');
+            break;
+        }
+    } 
+    public function outcome_api()
+    {
+        $action = $this->input->get('action');
+        $id = $this->input->get('id');
+
+        switch ($action) {
+            case 'create' :
+                $name = $this->input->post('name');
+                $value = $this->input->post('value');
+                $data = array(
+                    'name' => $name, 
+                    'value' =>$value
+                );
+                $this->laporan->add_outcome($data);
+                redirect('admin/laporan/');
+            break;
+            case 'update' :
+                $id = $this->input->post('id');
+                $name = $this->input->post('name');
+                $value = $this->input->post('value');
+                $data = array(
+                    'name' => $name, 
+                    'value' =>$value
+                );
+                $this->laporan->update_outcome($id,$data);
+                redirect('admin/laporan/');
+            break;
+            case 'delete' :
+                $this->laporan->delete_outcome($id);
+                redirect('admin/laporan/');
+            break;
+        }
     }
 }
